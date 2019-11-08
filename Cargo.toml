@@ -1,12 +1,14 @@
 [package]
 name = "himpi-sys"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Varphone Wong <varphone@qq.com>"]
+homepage = "https://github.com/varphone/himpi-sys"
 documentation = "https://docs.rs/himpi-sys"
 description = """
 Hi35XX MPI APIs for Rust unsafe bindings.
 """
 categories = ["embedded", "external-ffi-bindings"]
+readme = "README.md"
 license = "MIT"
 edition = "2018"
 
