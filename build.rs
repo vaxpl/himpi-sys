@@ -3,7 +3,7 @@ use regex::Regex;
 use std::env;
 use std::fs::File;
 use std::io::{Error, ErrorKind, Write};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 type MyError = Box<dyn std::error::Error>;
 
@@ -158,6 +158,11 @@ fn main() -> Result<(), MyError> {
     println!("cargo:rerun-if-changed=build.rs");
 
     setup_envir()?;
+
+    let mpp_dir = env::var("MPP_DIR").unwrap();
+    if Path::new(&mpp_dir).exists() == false {
+        return myerr!(format!("The MPP_DIR={} does not exists", mpp_dir));
+    }
 
     let wrapper_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("mpp-wrapper.h");
     let wrapper_path = wrapper_path.to_str().unwrap();
