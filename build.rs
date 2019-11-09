@@ -31,14 +31,14 @@ impl bindgen::callbacks::ParseCallbacks for MyParseCallbacks {
     }
 }
 
-#[cfg(feature = "static")]
+#[cfg(feature = "static-link")]
 macro_rules! linklib {
     ($x:expr) => {
         println!("cargo:rustc-link-lib=static={}", $x);
     };
 }
 
-#[cfg(not(feature = "static"))]
+#[cfg(not(feature = "static-link"))]
 macro_rules! linklib {
     ($x:expr) => {
         println!("cargo:rustc-link-lib=dylib={}", $x);
@@ -219,7 +219,7 @@ fn main() -> Result<(), MyError> {
         feature = "hi3518ev300",
         feature = "hi3531v100"
     )) {
-        #[cfg(not(feature = "static"))]
+        #[cfg(not(feature = "static-link"))]
         linklib!("pthread");
     }
 
