@@ -2,17 +2,17 @@
 name = "himpi-sys"
 version = "0.1.1"
 authors = ["Varphone Wong <varphone@qq.com>"]
-homepage = "https://github.com/varphone/himpi-sys"
-documentation = "https://docs.rs/himpi-sys"
-description = """
-Hi35XX MPI APIs for Rust unsafe bindings.
-"""
-categories = ["embedded", "external-ffi-bindings"]
-readme = "README.md"
-license = "MIT"
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# Metadata for Publish
+description = """
+Hi35XX MPI API for Rust unsafe bindings.
+"""
+documentation = "https://docs.rs/himpi-sys"
+homepage = "https://github.com/varphone/himpi-sys"
+readme = "README.md"
+categories = ["embedded", "external-ffi-bindings"]
+license = "MIT"
 
 [dependencies]
 rust-bitfield = "0.1.1"
