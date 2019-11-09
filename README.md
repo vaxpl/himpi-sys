@@ -1,7 +1,7 @@
 himpi-sys
 =========
 
-Hi35XX MPI APIs for Rust unsafe bindings.
+Hi35XX MPI API for Rust unsafe bindings.
 
 Requirements
 ------------
@@ -28,8 +28,8 @@ Requirements
 
 > The toolchain and the mpp-lib you can get from the BSP sdk.
 
-Env Defaults
-------------
+Envionment Defaults
+-------------------
 
 ### Hi3516EV200
 
