@@ -4,6 +4,53 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+// Fix incomplete Eq trait for MPP_BIND_DEST_S.
+#[cfg(not(feature = "hi3531v100"))]
+impl std::cmp::Eq for MPP_BIND_DEST_S {}
+
+// Fix incomplete Eq trait for MPP_VERSION_S.
+impl std::cmp::Eq for MPP_VERSION_S {}
+
+// Fix incomplete Debug trait for MPP_BIND_DEST_S
+impl std::fmt::Debug for MPP_BIND_DEST_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // FIXME:
+        write!(
+            f,
+            "MPP_BIND_DEST_S {{ u32Num: {}, astMppChn: [...] }}",
+            self.u32Num
+        )
+    }
+}
+
+// Fix incomplete Debug trait for MPP_VERSION_S
+impl std::fmt::Debug for MPP_VERSION_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = std::ffi::CStr::from_bytes_with_nul(&self.aVersion).unwrap_or_default();
+        write!(f, "MPP_VERSION_S {{ aVersion: {} }}", s.to_string_lossy())
+    }
+}
+
+/// Make HI_BOOL can convert to bool.
+impl std::convert::Into<bool> for HI_BOOL {
+    fn into(self) -> bool {
+        match self {
+            HI_BOOL::HI_TRUE => true,
+            HI_BOOL::HI_FALSE => false,
+        }
+    }
+}
+
+/// Make bool can convert to HI_BOOL.
+impl std::convert::Into<HI_BOOL> for bool {
+    fn into(self) -> HI_BOOL {
+        match self {
+            true => HI_BOOL::HI_TRUE,
+            false => HI_BOOL::HI_FALSE,
+        }
+    }
+}
+
 cfg_if::cfg_if! {
     if #[cfg(any(feature = "hi3519av100", feature = "hi3559av100"))] {
         use rust_bitfield::{bitfield_fields, BitRange, Bits};
