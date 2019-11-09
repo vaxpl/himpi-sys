@@ -7,6 +7,12 @@ use std::path::PathBuf;
 
 type MyError = Box<dyn std::error::Error>;
 
+macro_rules! myerr {
+    ($msg: expr) => {
+        Err(Box::new(Error::new(ErrorKind::Other, $msg)));
+    };
+}
+
 #[derive(Copy, Clone, Debug, Default)]
 struct MyParseCallbacks;
 
@@ -49,10 +55,7 @@ fn setup_envir() -> Result<(), MyError> {
     match env::var("TARGET") {
         Ok(val) => {
             if val == "x86_64-unknown-linux-gnu" {
-                return Err(Box::new(Error::new(
-                    ErrorKind::Other,
-                    "Target not supported!",
-                )));
+                return myerr!("Target not supported!");
             }
         }
         _ => {}
