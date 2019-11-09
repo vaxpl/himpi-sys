@@ -140,6 +140,18 @@ fn setup_envir() -> Result<(), MyError> {
 }
 
 fn main() -> Result<(), MyError> {
+    if cfg!(not(any(
+        feature = "hi3516ev200",
+        feature = "hi3516ev300",
+        feature = "hi3518ev200",
+        feature = "hi3518ev300",
+        feature = "hi3519av100",
+        feature = "hi3531v100",
+        feature = "hi3559av100",
+    ))) {
+        return myerr!("The target board does not specified!");
+    }
+
     println!("cargo:rerun-if-env-changed=MPP_DIR");
     println!("cargo:rerun-if-env-changed=SYS_INCLUDE");
     println!("cargo:rerun-if-env-changed=SYS_LIBDIR");
