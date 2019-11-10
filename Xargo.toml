@@ -1,0 +1,7 @@
+[dependencies]
+alloc = {}
+core = {}
+panic_unwind = {}
+std = {}
+test = {}
+unwind = {}
