@@ -12,6 +12,7 @@ impl std::cmp::Eq for MPP_BIND_DEST_S {}
 impl std::cmp::Eq for MPP_VERSION_S {}
 
 // Fix incomplete Debug trait for MPP_BIND_DEST_S
+#[cfg(not(feature = "hi3531v100"))]
 impl std::fmt::Debug for MPP_BIND_DEST_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // FIXME:
@@ -48,6 +49,15 @@ impl std::convert::Into<HI_BOOL> for bool {
             true => HI_BOOL::HI_TRUE,
             false => HI_BOOL::HI_FALSE,
         }
+    }
+}
+
+cfg_if::cfg_if! {
+    if #[cfg(feature = "hi3531v100")] {
+        pub use HI_MPI_SYS_Mmap as HI_MPI_SYS_MmapCache;
+        pub use HI_MPI_SYS_GetCurPts as HI_MPI_SYS_GetCurPTS;
+        pub use HI_MPI_SYS_InitPtsBase as HI_MPI_SYS_InitPTSBase;
+        pub use HI_MPI_SYS_SyncPts as HI_MPI_SYS_SyncPTS;
     }
 }
 
