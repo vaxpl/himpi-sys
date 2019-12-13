@@ -51,6 +51,23 @@ macro_rules! linklib {
     };
 }
 
+fn detect_mpp_path(mpp_dir: &str) -> Result<PathBuf, MyError> {
+    let dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let mut base_path = Path::new(&dir);
+    for _a in 0..3 {
+        let np = base_path.join(mpp_dir);
+        let path = Path::new(&np);
+        if path.exists() {
+            return Ok(path.to_path_buf());
+        }
+        match base_path.parent() {
+            Some(v) => base_path = v,
+            None => break,
+        }
+    }
+    myerr!(format!("The MPP_DIR={} does not detected!", mpp_dir))
+}
+
 fn setup_envir() -> Result<(), MyError> {
     match env::var("TARGET") {
         Ok(val) => {
@@ -69,13 +86,13 @@ fn setup_envir() -> Result<(), MyError> {
                 feature = "hi3518ev200",
                 feature = "hi3518ev300"
             ))]
-            env::set_var("MPP_DIR", "vendor/mpp-lib-Hi3516EV200_V1.0.1.0");
+            env::set_var("MPP_DIR", detect_mpp_path("vendor/mpp-lib-Hi3516EV200_V1.0.1.0").unwrap());
 
             #[cfg(feature = "hi3531v100")]
-            env::set_var("MPP_DIR", "vendor/mpp-lib-Hi3531V100_V1.0.D.0");
+            env::set_var("MPP_DIR", detect_mpp_path("vendor/mpp-lib-Hi3531V100_V1.0.D.0").unwrap());
 
             #[cfg(feature = "hi3559av100")]
-            env::set_var("MPP_DIR", "vendor/mpp-lib-Hi3559AV100_V2.0.2.0");
+            env::set_var("MPP_DIR", detect_mpp_path("vendor/mpp-lib-Hi3559AV100_V2.0.2.0").unwrap());
         }
         _ => {}
     };
