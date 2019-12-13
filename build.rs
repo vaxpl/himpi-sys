@@ -2,14 +2,39 @@ use bindgen;
 use regex::Regex;
 use std::env;
 use std::fs::File;
-use std::io::{Error, ErrorKind, Write};
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
-type MyError = Box<dyn std::error::Error>;
+type DynError = Box<dyn std::error::Error>;
 
-macro_rules! myerr {
+#[derive(Clone, Default)]
+struct MyError(String);
+
+impl MyError {
+    pub fn new<S: AsRef<str>>(msg: S) -> Self {
+        Self {
+            0: String::from(msg.as_ref()),
+        }
+    }
+}
+
+impl std::fmt::Debug for MyError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "MyError {{ {} }}", self.0)
+    }
+}
+
+impl std::fmt::Display for MyError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl std::error::Error for MyError {}
+
+macro_rules! MyErr {
     ($msg: expr) => {
-        Err(Box::new(Error::new(ErrorKind::Other, $msg)));
+        Err(Box::new(MyError::new($msg)))
     };
 }
 
@@ -51,11 +76,10 @@ macro_rules! linklib {
     };
 }
 
-fn detect_mpp_path(mpp_dir: &str) -> Result<PathBuf, MyError> {
-    let dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let mut base_path = Path::new(&dir);
+fn detect_path(base: &str, dir: &str) -> Result<PathBuf, DynError> {
+    let mut base_path = Path::new(&base);
     for _a in 0..9 {
-        let np = base_path.join(mpp_dir);
+        let np = base_path.join(dir);
         let path = Path::new(&np);
         if path.exists() {
             return Ok(path.to_path_buf());
@@ -65,14 +89,25 @@ fn detect_mpp_path(mpp_dir: &str) -> Result<PathBuf, MyError> {
             None => break,
         }
     }
-    myerr!(format!("The MPP_DIR={} does not detected!", mpp_dir))
+    MyErr!(format!("Dir `{}` does not detected!", dir))
 }
 
-fn setup_envir() -> Result<(), MyError> {
+fn detect_mpp_path(mpp_dir: &str) -> Result<PathBuf, DynError> {
+    let base1 = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let base2 = env::var("OUT_DIR").unwrap();
+    detect_path(&base1, mpp_dir)
+        .or_else(|_| detect_path(&base2, mpp_dir))
+        .or(MyErr!(format!(
+            "The `MPP_DIR={}` does not detected!",
+            mpp_dir
+        )))
+}
+
+fn setup_envir() -> Result<(), DynError> {
     match env::var("TARGET") {
         Ok(val) => {
             if val == "x86_64-unknown-linux-gnu" {
-                return myerr!("Target not supported!");
+                return MyErr!("Target not supported!");
             }
         }
         _ => {}
@@ -86,13 +121,22 @@ fn setup_envir() -> Result<(), MyError> {
                 feature = "hi3518ev200",
                 feature = "hi3518ev300"
             ))]
-            env::set_var("MPP_DIR", detect_mpp_path("vendor/mpp-lib-Hi3516EV200_V1.0.1.0").unwrap());
+            env::set_var(
+                "MPP_DIR",
+                detect_mpp_path("vendor/mpp-lib-Hi3516EV200_V1.0.1.0").unwrap(),
+            );
 
             #[cfg(feature = "hi3531v100")]
-            env::set_var("MPP_DIR", detect_mpp_path("vendor/mpp-lib-Hi3531V100_V1.0.D.0").unwrap());
+            env::set_var(
+                "MPP_DIR",
+                detect_mpp_path("vendor/mpp-lib-Hi3531V100_V1.0.D.0").unwrap(),
+            );
 
             #[cfg(feature = "hi3559av100")]
-            env::set_var("MPP_DIR", detect_mpp_path("vendor/mpp-lib-Hi3559AV100_V2.0.2.0").unwrap());
+            env::set_var(
+                "MPP_DIR",
+                detect_mpp_path("vendor/mpp-lib-Hi3559AV100_V2.0.2.0").unwrap(),
+            );
         }
         _ => {}
     };
@@ -156,7 +200,7 @@ fn setup_envir() -> Result<(), MyError> {
     Ok(())
 }
 
-fn main() -> Result<(), MyError> {
+fn main() -> Result<(), DynError> {
     if cfg!(not(any(
         feature = "hi3516ev200",
         feature = "hi3516ev300",
@@ -166,7 +210,7 @@ fn main() -> Result<(), MyError> {
         feature = "hi3531v100",
         feature = "hi3559av100",
     ))) {
-        return myerr!("The target board does not specified!");
+        return MyErr!("The target board does not specified!");
     }
 
     println!("cargo:rerun-if-env-changed=MPP_DIR");
@@ -178,7 +222,7 @@ fn main() -> Result<(), MyError> {
 
     let mpp_dir = env::var("MPP_DIR").unwrap();
     if Path::new(&mpp_dir).exists() == false {
-        return myerr!(format!("The MPP_DIR={} does not exists", mpp_dir));
+        return MyErr!(format!("The `MPP_DIR={}` does not exists", mpp_dir));
     }
 
     let wrapper_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("mpp-wrapper.h");
