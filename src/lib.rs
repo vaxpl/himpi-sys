@@ -4,6 +4,9 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+// Fix missing types.
+pub type HI_VOID = ::std::os::raw::c_void;
+
 // Fix incomplete Eq trait for MPP_BIND_DEST_S.
 #[cfg(not(feature = "hi3531v100"))]
 impl std::cmp::Eq for MPP_BIND_DEST_S {}
