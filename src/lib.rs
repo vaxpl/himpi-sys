@@ -1,4 +1,4 @@
-#![allow(non_upper_case_globals)]
+﻿#![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
@@ -54,6 +54,58 @@ impl std::convert::Into<HI_BOOL> for bool {
         }
     }
 }
+
+// Fix incomplete Debug trait for VENC_ATTR_S
+impl std::fmt::Debug for VENC_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("VENC_ATTR_S")
+            .field("enType", &self.enType)
+            .field("u32MaxPicWidth", &self.u32MaxPicWidth)
+            .field("u32MaxPicHeight", &self.u32MaxPicHeight)
+            .field("u32BufSize", &self.u32BufSize)
+            .field("u32Profile", &self.u32Profile)
+            .field("bByFrame", &self.bByFrame)
+            .field("u32PicWidth", &self.u32PicWidth)
+            .field("u32PicHeight", &self.u32PicHeight)
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_ATTR_S
+impl PartialEq for VENC_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        self.enType == other.enType
+            && self.u32MaxPicWidth == other.u32MaxPicHeight
+            && self.u32MaxPicHeight == other.u32MaxPicHeight
+            && self.u32BufSize == other.u32BufSize
+            && self.u32Profile == other.u32Profile
+            && self.bByFrame == other.bByFrame
+            && self.u32PicWidth == other.u32PicWidth
+            && self.u32PicHeight == other.u32PicHeight
+    }
+}
+
+// Fix incomplete Eq trait for VENC_ATTR_S
+impl Eq for VENC_ATTR_S {}
+
+// Fix incomplete Debug trait for VENC_CHN_ATTR_S
+impl std::fmt::Debug for VENC_CHN_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("VENC_CHN_ATTR_S")
+            .field("stVencAttr", &self.stVencAttr)
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_CHN_ATTR_S
+impl PartialEq for VENC_CHN_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        self.stVencAttr == other.stVencAttr
+    }
+}
+
+// Fix incomplete Eq trait for VENC_CHN_ATTR_S
+impl Eq for VENC_CHN_ATTR_S {}
 
 cfg_if::cfg_if! {
     if #[cfg(feature = "hi3531v100")] {
