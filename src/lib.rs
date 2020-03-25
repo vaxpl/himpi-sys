@@ -109,6 +109,8 @@ impl std::fmt::Debug for VENC_CHN_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("VENC_CHN_ATTR_S")
             .field("stVencAttr", &self.stVencAttr)
+            .field("stRcAttr", &self.stRcAttr)
+            .field("stGopAttr", &self.stGopAttr)
             .finish()
     }
 }
@@ -117,11 +119,139 @@ impl std::fmt::Debug for VENC_CHN_ATTR_S {
 impl PartialEq for VENC_CHN_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         self.stVencAttr == other.stVencAttr
+            && self.stRcAttr == other.stRcAttr
+            && self.stGopAttr == other.stGopAttr
     }
 }
 
 // Fix incomplete Eq trait for VENC_CHN_ATTR_S
 impl Eq for VENC_CHN_ATTR_S {}
+
+// Fix incomplete Debug trait for VENC_GOP_ATTR_S
+impl std::fmt::Debug for VENC_GOP_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fds = f.debug_struct("VENC_GOP_ATTR_S");
+        fds.field("enGopMode", &self.enGopMode);
+        unsafe {
+            use VENC_GOP_MODE_E::*;
+            match self.enGopMode {
+                VENC_GOPMODE_NORMALP => fds.field("stNormalP", &self.un1.stNormalP).finish(),
+                VENC_GOPMODE_DUALP => fds.field("stDualP", &self.un1.stDualP).finish(),
+                VENC_GOPMODE_SMARTP => fds.field("stSmartP", &self.un1.stSmartP).finish(),
+                VENC_GOPMODE_ADVSMARTP => fds.field("stAdvSmartP", &self.un1.stAdvSmartP).finish(),
+                VENC_GOPMODE_BIPREDB => fds.field("stBipredB", &self.un1.stBipredB).finish(),
+                VENC_GOPMODE_LOWDELAYB => fds.field("stBipredB", &self.un1.stBipredB).finish(),
+                _ => fds.finish(),
+            }
+        }
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_GOP_ATTR_S
+impl PartialEq for VENC_GOP_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        if self.enGopMode != other.enGopMode {
+            return false;
+        }
+        unsafe {
+            use VENC_GOP_MODE_E::*;
+            match self.enGopMode {
+                VENC_GOPMODE_NORMALP => self.un1.stNormalP == other.un1.stNormalP,
+                VENC_GOPMODE_DUALP => self.un1.stDualP == other.un1.stDualP,
+                VENC_GOPMODE_SMARTP => self.un1.stSmartP == other.un1.stSmartP,
+                VENC_GOPMODE_ADVSMARTP => self.un1.stAdvSmartP == other.un1.stAdvSmartP,
+                VENC_GOPMODE_BIPREDB => self.un1.stBipredB == other.un1.stBipredB,
+                VENC_GOPMODE_LOWDELAYB => self.un1.stBipredB == other.un1.stBipredB,
+                _ => false,
+            }
+        }
+    }
+}
+
+// Fix incomplete Eq trait for VENC_GOP_ATTR_S
+impl Eq for VENC_GOP_ATTR_S {}
+
+// Fix Default trait for VENC_RC_MODE_E
+impl Default for VENC_RC_MODE_E {
+    fn default() -> Self {
+        VENC_RC_MODE_E::VENC_RC_MODE_H264CBR
+    }
+}
+
+// Fix incomplete Debug trait for VENC_RC_ATTR_S
+impl std::fmt::Debug for VENC_RC_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fds = f.debug_struct("VENC_RC_ATTR_S");
+        // Prevent crash if `enRcMode` not in range.
+        let num = self.enRcMode as u32;
+        if num < VENC_RC_MODE_E::VENC_RC_MODE_H264CBR as u32
+            || num >= VENC_RC_MODE_E::VENC_RC_MODE_BUTT as u32
+        {
+            return fds.field("enRcMode", &"Invalid").finish();
+        }
+        fds.field("enRcMode", &self.enRcMode);
+        unsafe {
+            use VENC_RC_MODE_E::*;
+            match self.enRcMode {
+                VENC_RC_MODE_H264CBR => fds.field("stH264Cbr", &self.un1.stH264Cbr).finish(),
+                VENC_RC_MODE_H264VBR => fds.field("stH264Vbr", &self.un1.stH264Vbr).finish(),
+                VENC_RC_MODE_H264AVBR => fds.field("stH264AVbr", &self.un1.stH264AVbr).finish(),
+                VENC_RC_MODE_H264QVBR => fds.field("stH264QVbr", &self.un1.stH264QVbr).finish(),
+                VENC_RC_MODE_H264CVBR => fds.field("stH264CVbr", &self.un1.stH264CVbr).finish(),
+                VENC_RC_MODE_H264FIXQP => fds.field("stH264FixQp", &self.un1.stH264FixQp).finish(),
+                VENC_RC_MODE_H264QPMAP => fds.field("stH264QpMap", &self.un1.stH264QpMap).finish(),
+                VENC_RC_MODE_MJPEGCBR => fds.field("stMjpegCbr", &self.un1.stMjpegCbr).finish(),
+                VENC_RC_MODE_MJPEGVBR => fds.field("stMjpegVbr", &self.un1.stMjpegVbr).finish(),
+                VENC_RC_MODE_MJPEGFIXQP => {
+                    fds.field("stMjpegFixQp", &self.un1.stMjpegFixQp).finish()
+                }
+                VENC_RC_MODE_H265CBR => fds.field("stH265Cbr", &self.un1.stH265Cbr).finish(),
+                VENC_RC_MODE_H265VBR => fds.field("stH265Vbr", &self.un1.stH265Vbr).finish(),
+                VENC_RC_MODE_H265AVBR => fds.field("stH265AVbr", &self.un1.stH265AVbr).finish(),
+                VENC_RC_MODE_H265QVBR => fds.field("stH265QVbr", &self.un1.stH265QVbr).finish(),
+                VENC_RC_MODE_H265CVBR => fds.field("stH265CVbr", &self.un1.stH265CVbr).finish(),
+                VENC_RC_MODE_H265FIXQP => fds.field("stH265FixQp", &self.un1.stH265FixQp).finish(),
+                VENC_RC_MODE_H265QPMAP => fds.field("stH265QpMap", &self.un1.stH265QpMap).finish(),
+                _ => fds.finish(),
+            }
+        }
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_RC_ATTR_S
+impl PartialEq for VENC_RC_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        if self.enRcMode != other.enRcMode {
+            return false;
+        }
+        unsafe {
+            use VENC_RC_MODE_E::*;
+            match self.enRcMode {
+                VENC_RC_MODE_H264CBR => self.un1.stH264Cbr == other.un1.stH264Cbr,
+                VENC_RC_MODE_H264VBR => self.un1.stH264Vbr == other.un1.stH264Vbr,
+                VENC_RC_MODE_H264AVBR => self.un1.stH264AVbr == other.un1.stH264AVbr,
+                VENC_RC_MODE_H264QVBR => self.un1.stH264QVbr == other.un1.stH264QVbr,
+                VENC_RC_MODE_H264CVBR => self.un1.stH264CVbr == other.un1.stH264CVbr,
+                VENC_RC_MODE_H264FIXQP => self.un1.stH264FixQp == other.un1.stH264FixQp,
+                VENC_RC_MODE_H264QPMAP => self.un1.stH264QpMap == other.un1.stH264QpMap,
+                VENC_RC_MODE_MJPEGCBR => self.un1.stMjpegCbr == other.un1.stMjpegCbr,
+                VENC_RC_MODE_MJPEGVBR => self.un1.stMjpegVbr == other.un1.stMjpegVbr,
+                VENC_RC_MODE_MJPEGFIXQP => self.un1.stMjpegFixQp == other.un1.stMjpegFixQp,
+                VENC_RC_MODE_H265CBR => self.un1.stH265Cbr == other.un1.stH265Cbr,
+                VENC_RC_MODE_H265VBR => self.un1.stH265Vbr == other.un1.stH265Vbr,
+                VENC_RC_MODE_H265AVBR => self.un1.stH265AVbr == other.un1.stH265AVbr,
+                VENC_RC_MODE_H265QVBR => self.un1.stH265QVbr == other.un1.stH265QVbr,
+                VENC_RC_MODE_H265CVBR => self.un1.stH265CVbr == other.un1.stH265CVbr,
+                VENC_RC_MODE_H265FIXQP => self.un1.stH265FixQp == other.un1.stH265FixQp,
+                VENC_RC_MODE_H265QPMAP => self.un1.stH265QpMap == other.un1.stH265QpMap,
+                _ => false,
+            }
+        }
+    }
+}
+
+// Fix incomplete Eq trait for VENC_RC_ATTR_S
+impl Eq for VENC_RC_ATTR_S {}
 
 cfg_if::cfg_if! {
     if #[cfg(feature = "hi3531v100")] {
