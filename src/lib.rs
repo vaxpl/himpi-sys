@@ -47,19 +47,17 @@ impl std::fmt::Debug for MPP_VERSION_S {
 /// Make HI_BOOL can convert to bool.
 impl std::convert::Into<bool> for HI_BOOL {
     fn into(self) -> bool {
-        match self {
-            HI_BOOL::HI_TRUE => true,
-            HI_BOOL::HI_FALSE => false,
-        }
+        self == HI_BOOL::HI_TRUE
     }
 }
 
 /// Make bool can convert to HI_BOOL.
 impl std::convert::Into<HI_BOOL> for bool {
     fn into(self) -> HI_BOOL {
-        match self {
-            true => HI_BOOL::HI_TRUE,
-            false => HI_BOOL::HI_FALSE,
+        if self {
+            HI_BOOL::HI_TRUE
+        } else {
+            HI_BOOL::HI_FALSE
         }
     }
 }
