@@ -256,6 +256,29 @@ impl PartialEq for VENC_RC_ATTR_S {
 // Fix incomplete Eq trait for VENC_RC_ATTR_S
 impl Eq for VENC_RC_ATTR_S {}
 
+// Fix incomplete Debug trait for VENC_STREAM_S
+impl std::fmt::Debug for VENC_STREAM_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fds = f.debug_struct("VENC_STREAM_S");
+        fds.field("pstPack", &self.pstPack)
+            .field("u32PackCount", &self.u32PackCount)
+            .field("u32Seq", &self.u32Seq);
+        fds.finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_STREAM_S
+impl PartialEq for VENC_STREAM_S {
+    fn eq(&self, other: &Self) -> bool {
+        self.pstPack == other.pstPack
+            && self.u32PackCount == other.u32PackCount
+            && self.u32Seq == other.u32Seq
+    }
+}
+
+// Fix incomplete Eq trait for VENC_STREAM_S
+impl Eq for VENC_STREAM_S {}
+
 cfg_if::cfg_if! {
     if #[cfg(feature = "hi3531v100")] {
         pub use HI_MPI_SYS_Mmap as HI_MPI_SYS_MmapCache;
