@@ -58,16 +58,25 @@ impl std::convert::Into<HI_BOOL> for bool {
 // Fix incomplete Debug trait for VENC_ATTR_S
 impl std::fmt::Debug for VENC_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("VENC_ATTR_S")
-            .field("enType", &self.enType)
+        use PAYLOAD_TYPE_E::*;
+        let mut fds = f.debug_struct("VENC_ATTR_S");
+        fds.field("enType", &self.enType)
             .field("u32MaxPicWidth", &self.u32MaxPicWidth)
             .field("u32MaxPicHeight", &self.u32MaxPicHeight)
             .field("u32BufSize", &self.u32BufSize)
             .field("u32Profile", &self.u32Profile)
             .field("bByFrame", &self.bByFrame)
             .field("u32PicWidth", &self.u32PicWidth)
-            .field("u32PicHeight", &self.u32PicHeight)
-            .finish()
+            .field("u32PicHeight", &self.u32PicHeight);
+        unsafe {
+            match self.enType {
+                PT_H264 => fds.field("stAttrH264e", &self.un1.stAttrH264e).finish(),
+                PT_H265 => fds.field("stAttrH265e", &self.un1.stAttrH265e).finish(),
+                PT_MJPEG => fds.field("stAttrH265e", &self.un1.stAttrMjpege).finish(),
+                PT_JPEG => fds.field("stAttrH265e", &self.un1.stAttrJpege).finish(),
+                _ => fds.finish(),
+            }
+        }
     }
 }
 
