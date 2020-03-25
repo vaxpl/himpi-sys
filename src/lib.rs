@@ -91,7 +91,7 @@ impl std::fmt::Debug for VENC_ATTR_S {
 impl PartialEq for VENC_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         self.enType == other.enType
-            && self.u32MaxPicWidth == other.u32MaxPicHeight
+            && self.u32MaxPicWidth == other.u32MaxPicWidth
             && self.u32MaxPicHeight == other.u32MaxPicHeight
             && self.u32BufSize == other.u32BufSize
             && self.u32Profile == other.u32Profile
