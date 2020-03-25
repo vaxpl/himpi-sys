@@ -127,6 +127,9 @@ impl PartialEq for VENC_CHN_ATTR_S {
 // Fix incomplete Eq trait for VENC_CHN_ATTR_S
 impl Eq for VENC_CHN_ATTR_S {}
 
+// Fix missing Eq trait for VENC_CHN_STATUS_S
+impl Eq for VENC_CHN_STATUS_S {}
+
 // Fix incomplete Debug trait for VENC_GOP_ATTR_S
 impl std::fmt::Debug for VENC_GOP_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
