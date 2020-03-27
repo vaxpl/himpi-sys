@@ -130,6 +130,39 @@ impl Eq for VENC_CHN_ATTR_S {}
 // Fix missing Eq trait for VENC_CHN_STATUS_S
 impl Eq for VENC_CHN_STATUS_S {}
 
+// Cast u32 -> VENC_DATA_TYPE_U
+impl From<u32> for VENC_DATA_TYPE_U {
+    fn from(val: u32) -> VENC_DATA_TYPE_U {
+        VENC_DATA_TYPE_U {
+            _bindgen_union_align: val,
+        }
+    }
+}
+
+// Cast VENC_DATA_TYPE_U -> u32
+impl Into<u32> for VENC_DATA_TYPE_U {
+    fn into(self) -> u32 {
+        unsafe { self._bindgen_union_align }
+    }
+}
+
+// Fix incomplete Debug trait for VENC_DATA_TYPE_U
+impl std::fmt::Debug for VENC_DATA_TYPE_U {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        unsafe { write!(f, "{:?}", self._bindgen_union_align) }
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_DATA_TYPE_U
+impl PartialEq for VENC_DATA_TYPE_U {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe { self.enH264EType == other.enH264EType }
+    }
+}
+
+// Fix incomplete Eq trait for VENC_GOP_ATTR_S
+impl Eq for VENC_DATA_TYPE_U {}
+
 // Fix incomplete Debug trait for VENC_GOP_ATTR_S
 impl std::fmt::Debug for VENC_GOP_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -173,6 +206,63 @@ impl PartialEq for VENC_GOP_ATTR_S {
 
 // Fix incomplete Eq trait for VENC_GOP_ATTR_S
 impl Eq for VENC_GOP_ATTR_S {}
+
+// Fix incomplete Debug trait for VENC_PACK_INFO_S
+impl std::fmt::Debug for VENC_PACK_INFO_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("VENC_PACK_INFO_S")
+            .field("u32PackType", &self.u32PackType)
+            .field("u32PackOffset", &self.u32PackOffset)
+            .field("u32PackLength", &self.u32PackLength)
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_PACK_INFO_S
+impl PartialEq for VENC_PACK_INFO_S {
+    fn eq(&self, other: &Self) -> bool {
+        self.u32PackType == other.u32PackType
+            && self.u32PackOffset == other.u32PackOffset
+            && self.u32PackLength == other.u32PackLength
+    }
+}
+
+// Fix incomplete Eq trait for VENC_PACK_INFO_S
+impl Eq for VENC_PACK_INFO_S {}
+
+// Fix incomplete Debug trait for VENC_PACK_S
+impl std::fmt::Debug for VENC_PACK_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("VENC_PACK_S")
+            .field("u64PhyAddr", &self.u64PhyAddr)
+            .field("pu8Addr", &self.pu8Addr)
+            .field("u32Len", &self.u32Len)
+            .field("u64PTS", &self.u64PTS)
+            .field("bFrameEnd", &self.bFrameEnd)
+            .field("DataType", &self.DataType)
+            .field("u32Offset", &self.u32Offset)
+            .field("u32DataNum", &self.u32DataNum)
+            .field("stPackInfo", &&self.stPackInfo[..self.u32DataNum as usize])
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_PACK_S
+impl PartialEq for VENC_PACK_S {
+    fn eq(&self, other: &Self) -> bool {
+        self.u64PhyAddr == other.u64PhyAddr
+            && self.u32Len == other.u32Len
+            && self.u64PTS == other.u64PTS
+            && self.bFrameEnd == other.bFrameEnd
+            && self.DataType == other.DataType
+            && self.u32Offset == other.u32Offset
+            && self.u32DataNum == other.u32DataNum
+            && self.stPackInfo == other.stPackInfo
+    }
+}
+
+// Fix incomplete Eq trait for VENC_PACK_S
+impl Eq for VENC_PACK_S {}
 
 // Fix Default trait for VENC_RC_MODE_E
 impl Default for VENC_RC_MODE_E {
@@ -278,6 +368,9 @@ impl PartialEq for VENC_STREAM_S {
 
 // Fix incomplete Eq trait for VENC_STREAM_S
 impl Eq for VENC_STREAM_S {}
+
+// Fix incomplete Eq trait for VENC_STREAM_INFO_S
+impl Eq for VENC_STREAM_INFO_S {}
 
 cfg_if::cfg_if! {
     if #[cfg(feature = "hi3531v100")] {
