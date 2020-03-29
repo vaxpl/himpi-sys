@@ -100,6 +100,46 @@ impl PartialEq for VDEC_CHN_ATTR_S {
 // Fix incomplete Eq trait for VDEC_CHN_ATTR_S
 impl Eq for VDEC_CHN_ATTR_S {}
 
+// Fix incomplete Debug trait for VDEC_CHN_PARAM_S
+impl std::fmt::Debug for VDEC_CHN_PARAM_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fds = f.debug_struct("VDEC_CHN_PARAM_S");
+        fds.field("enType", &self.enType)
+            .field("u32DisplayFrameNum", &self.u32DisplayFrameNum);
+        use PAYLOAD_TYPE_E::*;
+        match self.enType {
+            PT_H264 | PT_H265 => unsafe {
+                fds.field("stVdecVideoParam", &self.un1.stVdecVideoParam);
+            },
+            PT_JPEG | PT_MJPEG => unsafe {
+                fds.field("stVdecPictureParam", &self.un1.stVdecPictureParam);
+            },
+            _ => {}
+        }
+        fds.finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VDEC_CHN_PARAM_S
+impl PartialEq for VDEC_CHN_PARAM_S {
+    fn eq(&self, other: &Self) -> bool {
+        let b = self.enType == other.enType && self.u32DisplayFrameNum == other.u32DisplayFrameNum;
+        use PAYLOAD_TYPE_E::*;
+        match self.enType {
+            PT_H264 | PT_H265 => unsafe {
+                b && self.un1.stVdecVideoParam == other.un1.stVdecVideoParam
+            },
+            PT_JPEG | PT_MJPEG => unsafe {
+                b && self.un1.stVdecPictureParam == other.un1.stVdecPictureParam
+            },
+            _ => b,
+        }
+    }
+}
+
+// Fix incomplete Eq trait for VDEC_CHN_PARAM_S
+impl Eq for VDEC_CHN_PARAM_S {}
+
 // Fix incomplete Debug trait for VENC_ATTR_S
 impl std::fmt::Debug for VENC_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
