@@ -274,7 +274,7 @@ fn main() -> Result<(), DynError> {
     }
 
     if cfg!(feature = "mpi-vdec") {
-        writeln!(wrapper, "#include <mpi_venc.h>")?;
+        writeln!(wrapper, "#include <mpi_vdec.h>")?;
     }
 
     if cfg!(feature = "mpi-venc") {
