@@ -62,6 +62,44 @@ impl std::convert::Into<HI_BOOL> for bool {
     }
 }
 
+// Fix incomplete Debug trait for VDEC_CHN_ATTR_S
+impl std::fmt::Debug for VDEC_CHN_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        use PAYLOAD_TYPE_E::*;
+        unsafe {
+            f.debug_struct("VDEC_CHN_ATTR_S")
+                .field("enType", &self.enType)
+                .field("enMode", &self.enMode)
+                .field("u32PicWidth", &self.u32PicWidth)
+                .field("u32PicHeight", &self.u32PicHeight)
+                .field("u32StreamBufSize", &self.u32StreamBufSize)
+                .field("u32FrameBufSize", &self.u32FrameBufSize)
+                .field("u32FrameBufCnt", &self.u32FrameBufCnt)
+                .field("stVdecVideoAttr", &self.un1.stVdecVideoAttr)
+                .finish()
+        }
+    }
+}
+
+// Fix incomplete PartialEq trait for VDEC_CHN_ATTR_S
+impl PartialEq for VDEC_CHN_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            self.enType == other.enType
+                && self.enMode == other.enMode
+                && self.u32PicWidth == other.u32PicWidth
+                && self.u32PicHeight == other.u32PicHeight
+                && self.u32StreamBufSize == other.u32StreamBufSize
+                && self.u32FrameBufSize == other.u32FrameBufSize
+                && self.u32FrameBufCnt == other.u32FrameBufCnt
+                && self.un1.stVdecVideoAttr == other.un1.stVdecVideoAttr
+        }
+    }
+}
+
+// Fix incomplete Eq trait for VDEC_CHN_ATTR_S
+impl Eq for VDEC_CHN_ATTR_S {}
+
 // Fix incomplete Debug trait for VENC_ATTR_S
 impl std::fmt::Debug for VENC_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
