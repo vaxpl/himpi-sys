@@ -140,6 +140,41 @@ impl PartialEq for VDEC_CHN_PARAM_S {
 // Fix incomplete Eq trait for VDEC_CHN_PARAM_S
 impl Eq for VDEC_CHN_PARAM_S {}
 
+// Fix incomplete Debug trait for VDEC_PRTCL_PARAM_S
+impl std::fmt::Debug for VDEC_PRTCL_PARAM_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fds = f.debug_struct("VDEC_PRTCL_PARAM_S");
+        fds.field("enType", &self.enType);
+        use PAYLOAD_TYPE_E::*;
+        match self.enType {
+            PT_H264 => unsafe {
+                fds.field("stH264PrtclParam", &self.un1.stH264PrtclParam);
+            },
+            PT_H265 => unsafe {
+                fds.field("stH265PrtclParam", &self.un1.stH265PrtclParam);
+            },
+            _ => {}
+        }
+        fds.finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VDEC_PRTCL_PARAM_S
+impl PartialEq for VDEC_PRTCL_PARAM_S {
+    fn eq(&self, other: &Self) -> bool {
+        let b = self.enType == other.enType;
+        use PAYLOAD_TYPE_E::*;
+        match self.enType {
+            PT_H264 => unsafe { b && self.un1.stH264PrtclParam == other.un1.stH264PrtclParam },
+            PT_H265 => unsafe { b && self.un1.stH265PrtclParam == other.un1.stH265PrtclParam },
+            _ => b,
+        }
+    }
+}
+
+// Fix incomplete Eq trait for VDEC_PRTCL_PARAM_S
+impl Eq for VDEC_PRTCL_PARAM_S {}
+
 // Fix incomplete Debug trait for VENC_ATTR_S
 impl std::fmt::Debug for VENC_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
