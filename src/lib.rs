@@ -1,4 +1,4 @@
-﻿#![allow(non_upper_case_globals)]
+#![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
@@ -62,10 +62,151 @@ impl std::convert::Into<HI_BOOL> for bool {
     }
 }
 
+// Fix incomplete Debug trait for SVP_BLOB_S
+#[cfg(feature = "mpi-nnie")]
+impl std::fmt::Debug for SVP_BLOB_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        unsafe {
+            f.debug_struct("SVP_BLOB_S")
+                .field("enType", &self.enType)
+                .field("u32Stride", &self.u32Stride)
+                .field("u64VirAddr", &self.u64VirAddr)
+                .field("u64PhyAddr", &self.u64PhyAddr)
+                .field("u32Num", &self.u32Num)
+                .field("stWhc", &self.unShape.stWhc)
+                .field("stSeq", &self.unShape.stSeq)
+                .finish()
+        }
+    }
+}
+
+// Fix incomplete PartialEq trait for SVP_BLOB_S
+#[cfg(feature = "mpi-nnie")]
+impl PartialEq for SVP_BLOB_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            self.enType == other.enType
+                && self.u32Stride == other.u32Stride
+                && self.u64VirAddr == other.u64VirAddr
+                && self.u64PhyAddr == other.u64PhyAddr
+                && self.u32Num == other.u32Num
+                && self.unShape.stWhc == other.unShape.stWhc
+        }
+    }
+}
+
+// Fix incomplete Eq trait for SVP_BLOB_S
+#[cfg(feature = "mpi-nnie")]
+impl Eq for SVP_BLOB_S {}
+
+// Fix incomplete Debug trait for SVP_NNIE_NODE_S
+#[cfg(feature = "mpi-nnie")]
+impl std::fmt::Debug for SVP_NNIE_NODE_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        unsafe {
+            f.debug_struct("SVP_NNIE_NODE_S")
+                .field("enType", &self.enType)
+                .field("stWhc", &self.unShape.stWhc)
+                .field("u32Dim", &self.unShape.u32Dim)
+                .field("u32NodeId", &self.u32NodeId)
+                .field("szName", &std::ffi::CStr::from_ptr(self.szName.as_ptr()))
+                .finish()
+        }
+    }
+}
+
+// Fix incomplete PartialEq trait for SVP_NNIE_NODE_S
+#[cfg(feature = "mpi-nnie")]
+impl PartialEq for SVP_NNIE_NODE_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            self.enType == other.enType
+                && self.unShape.stWhc == other.unShape.stWhc
+                && self.unShape.u32Dim == other.unShape.u32Dim
+                && self.u32NodeId == other.u32NodeId
+                && self.szName == other.szName
+        }
+    }
+}
+
+// Fix incomplete Eq trait for SVP_NNIE_NODE_S
+#[cfg(feature = "mpi-nnie")]
+impl Eq for SVP_NNIE_NODE_S {}
+
+// Fix incomplete Debug trait for SVP_NNIE_MODEL_S
+#[cfg(feature = "mpi-nnie")]
+impl std::fmt::Debug for SVP_NNIE_MODEL_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("SVP_NNIE_MODEL_S")
+            .field("enRunMode", &self.enRunMode)
+            .field("u32TmpBufSize", &self.u32TmpBufSize)
+            .field("u32NetSegNum", &self.u32NetSegNum)
+            .field("astSeg", &self.astSeg)
+            .field("astRoiInfo", &self.astRoiInfo)
+            .field("stBase", &self.stBase)
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for SVP_NNIE_MODEL_S
+#[cfg(feature = "mpi-nnie")]
+impl PartialEq for SVP_NNIE_MODEL_S {
+    fn eq(&self, other: &Self) -> bool {
+        self.enRunMode == other.enRunMode
+            && self.u32TmpBufSize == other.u32TmpBufSize
+            && self.u32NetSegNum == other.u32NetSegNum
+            && self.astSeg == other.astSeg
+            && self.astRoiInfo == other.astRoiInfo
+            && self.stBase == other.stBase
+    }
+}
+
+// Fix incomplete Eq trait for SVP_NNIE_MODEL_S
+impl Eq for SVP_NNIE_MODEL_S {}
+
+// Fix incomplete Debug trait for SVP_NNIE_SEG_S
+#[cfg(feature = "mpi-nnie")]
+impl std::fmt::Debug for SVP_NNIE_SEG_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("SVP_NNIE_SEG_S")
+            .field("enNetType", &self.enNetType)
+            .field("u16SrcNum", &self.u16SrcNum)
+            .field("u16DstNum", &self.u16DstNum)
+            .field("u16RoiPoolNum", &self.u16RoiPoolNum)
+            .field("u16MaxStep", &self.u16MaxStep)
+            .field("u32InstOffset", &self.u32InstOffset)
+            .field("u32InstLen", &self.u32InstLen)
+            .field("astSrcNode", &self.astSrcNode)
+            .field("astDstNode", &self.astDstNode)
+            .field("au32RoiIdx", &self.au32RoiIdx)
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for SVP_NNIE_SEG_S
+#[cfg(feature = "mpi-nnie")]
+impl PartialEq for SVP_NNIE_SEG_S {
+    fn eq(&self, other: &Self) -> bool {
+        self.enNetType == other.enNetType
+            && self.u16SrcNum == other.u16SrcNum
+            && self.u16DstNum == other.u16DstNum
+            && self.u16RoiPoolNum == other.u16RoiPoolNum
+            && self.u16MaxStep == other.u16MaxStep
+            && self.u32InstOffset == other.u32InstOffset
+            && self.u32InstLen == other.u32InstLen
+            && self.astSrcNode == other.astSrcNode
+            && self.astDstNode == other.astDstNode
+            && self.au32RoiIdx == other.au32RoiIdx
+    }
+}
+
+// Fix incomplete Eq trait for SVP_NNIE_SEG_S
+#[cfg(feature = "mpi-nnie")]
+impl Eq for SVP_NNIE_SEG_S {}
+
 // Fix incomplete Debug trait for VDEC_CHN_ATTR_S
 impl std::fmt::Debug for VDEC_CHN_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        use PAYLOAD_TYPE_E::*;
         unsafe {
             f.debug_struct("VDEC_CHN_ATTR_S")
                 .field("enType", &self.enType)

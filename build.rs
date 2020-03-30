@@ -273,6 +273,11 @@ fn main() -> Result<(), DynError> {
         linklib!("hdmi");
     }
 
+    if cfg!(feature = "mpi-nnie") {
+        writeln!(wrapper, "#include <mpi_nnie.h>")?;
+        linklib!("nnie");
+    }
+
     if cfg!(feature = "mpi-vdec") {
         writeln!(wrapper, "#include <mpi_vdec.h>")?;
     }
@@ -333,6 +338,7 @@ fn main() -> Result<(), DynError> {
         .whitelist_var("^BIND.*|^VB_.*|^POOL_.*")
         .whitelist_var("^(VDEC|VENC|VI|VO|VPSS)_.*")
         .whitelist_var("^(NR|PRORES)_.*")
+        .whitelist_var("^SVP_.*")
         .use_core()
         .clang_arg(format!("-I{}/include", env::var("MPP_DIR").unwrap()))
         .clang_arg(format!("-I{}", env::var("SYS_INCLUDE").unwrap()))
