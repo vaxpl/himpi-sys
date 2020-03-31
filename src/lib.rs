@@ -1,3 +1,7 @@
+//! Hi35XXX 多媒体应用接口安全绑定。
+//!
+//! 本项目当前基于 HiMPP V4.0 媒体处理软件接口实现。
+//!
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -113,6 +117,14 @@ impl PartialEq for SVP_BLOB_S {
 // Fix incomplete Eq trait for SVP_BLOB_S
 #[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_BLOB_S {}
+
+// Impl AsRef<SVP_NNIE_FORWARD_CTRL_S> for Self
+#[cfg(feature = "mpi-nnie")]
+impl_as_ref_for_self!(SVP_NNIE_FORWARD_CTRL_S);
+
+// Impl AsRef<SVP_NNIE_FORWARD_WITHBBOX_CTRL_S> for Self
+#[cfg(feature = "mpi-nnie")]
+impl_as_ref_for_self!(SVP_NNIE_FORWARD_WITHBBOX_CTRL_S);
 
 // Impl AsRef<SVP_NNIE_NODE_S> for Self
 #[cfg(feature = "mpi-nnie")]
