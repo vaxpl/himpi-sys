@@ -11,6 +11,17 @@
 #![allow(clippy::unreadable_literal)]
 #![allow(clippy::useless_transmute)]
 
+/// Implement AsRef on Self
+macro_rules! impl_as_ref_for_self {
+    ($Type:ty) => {
+        impl AsRef<$Type> for $Type {
+            fn as_ref(&self) -> &$Type {
+                self
+            }
+        }
+    };
+}
+
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 // Fix missing types.
@@ -62,6 +73,10 @@ impl std::convert::Into<HI_BOOL> for bool {
     }
 }
 
+// Impl AsRef<SVP_BLOB_S> for Self
+#[cfg(feature = "mpi-nnie")]
+impl_as_ref_for_self!(SVP_BLOB_S);
+
 // Fix incomplete Debug trait for SVP_BLOB_S
 #[cfg(feature = "mpi-nnie")]
 impl std::fmt::Debug for SVP_BLOB_S {
@@ -99,6 +114,10 @@ impl PartialEq for SVP_BLOB_S {
 #[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_BLOB_S {}
 
+// Impl AsRef<SVP_NNIE_NODE_S> for Self
+#[cfg(feature = "mpi-nnie")]
+impl_as_ref_for_self!(SVP_NNIE_NODE_S);
+
 // Fix incomplete Debug trait for SVP_NNIE_NODE_S
 #[cfg(feature = "mpi-nnie")]
 impl std::fmt::Debug for SVP_NNIE_NODE_S {
@@ -133,6 +152,10 @@ impl PartialEq for SVP_NNIE_NODE_S {
 #[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_NNIE_NODE_S {}
 
+// Impl AsRef<SVP_NNIE_MODEL_S> for Self
+#[cfg(feature = "mpi-nnie")]
+impl_as_ref_for_self!(SVP_NNIE_MODEL_S);
+
 // Fix incomplete Debug trait for SVP_NNIE_MODEL_S
 #[cfg(feature = "mpi-nnie")]
 impl std::fmt::Debug for SVP_NNIE_MODEL_S {
@@ -163,6 +186,10 @@ impl PartialEq for SVP_NNIE_MODEL_S {
 
 // Fix incomplete Eq trait for SVP_NNIE_MODEL_S
 impl Eq for SVP_NNIE_MODEL_S {}
+
+// Impl AsRef<SVP_NNIE_SEG_S> for Self
+#[cfg(feature = "mpi-nnie")]
+impl_as_ref_for_self!(SVP_NNIE_SEG_S);
 
 // Fix incomplete Debug trait for SVP_NNIE_SEG_S
 #[cfg(feature = "mpi-nnie")]
@@ -204,7 +231,12 @@ impl PartialEq for SVP_NNIE_SEG_S {
 #[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_NNIE_SEG_S {}
 
+// Impl AsRef<VDEC_CHN_ATTR_S> for Self
+#[cfg(feature = "mpi-vdec")]
+impl_as_ref_for_self!(VDEC_CHN_ATTR_S);
+
 // Fix incomplete Debug trait for VDEC_CHN_ATTR_S
+#[cfg(feature = "mpi-vdec")]
 impl std::fmt::Debug for VDEC_CHN_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         unsafe {
@@ -223,6 +255,7 @@ impl std::fmt::Debug for VDEC_CHN_ATTR_S {
 }
 
 // Fix incomplete PartialEq trait for VDEC_CHN_ATTR_S
+#[cfg(feature = "mpi-vdec")]
 impl PartialEq for VDEC_CHN_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         unsafe {
@@ -239,9 +272,15 @@ impl PartialEq for VDEC_CHN_ATTR_S {
 }
 
 // Fix incomplete Eq trait for VDEC_CHN_ATTR_S
+#[cfg(feature = "mpi-vdec")]
 impl Eq for VDEC_CHN_ATTR_S {}
 
+// Impl AsRef<VDEC_CHN_PARAM_S> for Self
+#[cfg(feature = "mpi-vdec")]
+impl_as_ref_for_self!(VDEC_CHN_PARAM_S);
+
 // Fix incomplete Debug trait for VDEC_CHN_PARAM_S
+#[cfg(feature = "mpi-vdec")]
 impl std::fmt::Debug for VDEC_CHN_PARAM_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fds = f.debug_struct("VDEC_CHN_PARAM_S");
@@ -262,6 +301,7 @@ impl std::fmt::Debug for VDEC_CHN_PARAM_S {
 }
 
 // Fix incomplete PartialEq trait for VDEC_CHN_PARAM_S
+#[cfg(feature = "mpi-vdec")]
 impl PartialEq for VDEC_CHN_PARAM_S {
     fn eq(&self, other: &Self) -> bool {
         let b = self.enType == other.enType && self.u32DisplayFrameNum == other.u32DisplayFrameNum;
@@ -279,9 +319,15 @@ impl PartialEq for VDEC_CHN_PARAM_S {
 }
 
 // Fix incomplete Eq trait for VDEC_CHN_PARAM_S
+#[cfg(feature = "mpi-vdec")]
 impl Eq for VDEC_CHN_PARAM_S {}
 
+// Impl AsRef<VDEC_PRTCL_PARAM_S> for Self
+#[cfg(feature = "mpi-vdec")]
+impl_as_ref_for_self!(VDEC_PRTCL_PARAM_S);
+
 // Fix incomplete Debug trait for VDEC_PRTCL_PARAM_S
+#[cfg(feature = "mpi-vdec")]
 impl std::fmt::Debug for VDEC_PRTCL_PARAM_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fds = f.debug_struct("VDEC_PRTCL_PARAM_S");
@@ -301,6 +347,7 @@ impl std::fmt::Debug for VDEC_PRTCL_PARAM_S {
 }
 
 // Fix incomplete PartialEq trait for VDEC_PRTCL_PARAM_S
+#[cfg(feature = "mpi-vdec")]
 impl PartialEq for VDEC_PRTCL_PARAM_S {
     fn eq(&self, other: &Self) -> bool {
         let b = self.enType == other.enType;
@@ -314,9 +361,15 @@ impl PartialEq for VDEC_PRTCL_PARAM_S {
 }
 
 // Fix incomplete Eq trait for VDEC_PRTCL_PARAM_S
+#[cfg(feature = "mpi-vdec")]
 impl Eq for VDEC_PRTCL_PARAM_S {}
 
+// Impl AsRef<VENC_ATTR_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_ATTR_S);
+
 // Fix incomplete Debug trait for VENC_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         use PAYLOAD_TYPE_E::*;
@@ -342,6 +395,7 @@ impl std::fmt::Debug for VENC_ATTR_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         self.enType == other.enType
@@ -356,9 +410,15 @@ impl PartialEq for VENC_ATTR_S {
 }
 
 // Fix incomplete Eq trait for VENC_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_ATTR_S {}
 
+// Impl AsRef<VENC_CHN_ATTR_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_CHN_ATTR_S);
+
 // Fix incomplete Debug trait for VENC_CHN_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_CHN_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("VENC_CHN_ATTR_S")
@@ -370,6 +430,7 @@ impl std::fmt::Debug for VENC_CHN_ATTR_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_CHN_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_CHN_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         self.stVencAttr == other.stVencAttr
@@ -379,12 +440,19 @@ impl PartialEq for VENC_CHN_ATTR_S {
 }
 
 // Fix incomplete Eq trait for VENC_CHN_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_CHN_ATTR_S {}
 
+// Impl AsRef<VENC_CHN_STATUS_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_CHN_STATUS_S);
+
 // Fix missing Eq trait for VENC_CHN_STATUS_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_CHN_STATUS_S {}
 
 // Cast u32 -> VENC_DATA_TYPE_U
+#[cfg(feature = "mpi-venc")]
 impl From<u32> for VENC_DATA_TYPE_U {
     fn from(val: u32) -> VENC_DATA_TYPE_U {
         VENC_DATA_TYPE_U {
@@ -394,6 +462,7 @@ impl From<u32> for VENC_DATA_TYPE_U {
 }
 
 // Cast VENC_DATA_TYPE_U -> u32
+#[cfg(feature = "mpi-venc")]
 impl Into<u32> for VENC_DATA_TYPE_U {
     fn into(self) -> u32 {
         unsafe { self._bindgen_union_align }
@@ -401,6 +470,7 @@ impl Into<u32> for VENC_DATA_TYPE_U {
 }
 
 // Fix incomplete Debug trait for VENC_DATA_TYPE_U
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_DATA_TYPE_U {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         unsafe { write!(f, "{:?}", self._bindgen_union_align) }
@@ -408,6 +478,7 @@ impl std::fmt::Debug for VENC_DATA_TYPE_U {
 }
 
 // Fix incomplete PartialEq trait for VENC_DATA_TYPE_U
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_DATA_TYPE_U {
     fn eq(&self, other: &Self) -> bool {
         unsafe { self.enH264EType == other.enH264EType }
@@ -415,9 +486,15 @@ impl PartialEq for VENC_DATA_TYPE_U {
 }
 
 // Fix incomplete Eq trait for VENC_GOP_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_DATA_TYPE_U {}
 
+// Impl AsRef<VENC_GOP_ATTR_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_GOP_ATTR_S);
+
 // Fix incomplete Debug trait for VENC_GOP_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_GOP_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fds = f.debug_struct("VENC_GOP_ATTR_S");
@@ -438,6 +515,7 @@ impl std::fmt::Debug for VENC_GOP_ATTR_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_GOP_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_GOP_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         if self.enGopMode != other.enGopMode {
@@ -459,9 +537,15 @@ impl PartialEq for VENC_GOP_ATTR_S {
 }
 
 // Fix incomplete Eq trait for VENC_GOP_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_GOP_ATTR_S {}
 
+// Impl AsRef<VENC_PACK_INFO_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_PACK_INFO_S);
+
 // Fix incomplete Debug trait for VENC_PACK_INFO_S
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_PACK_INFO_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("VENC_PACK_INFO_S")
@@ -473,6 +557,7 @@ impl std::fmt::Debug for VENC_PACK_INFO_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_PACK_INFO_S
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_PACK_INFO_S {
     fn eq(&self, other: &Self) -> bool {
         self.u32PackType == other.u32PackType
@@ -482,9 +567,15 @@ impl PartialEq for VENC_PACK_INFO_S {
 }
 
 // Fix incomplete Eq trait for VENC_PACK_INFO_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_PACK_INFO_S {}
 
+// Impl AsRef<VENC_PACK_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_PACK_S);
+
 // Fix incomplete Debug trait for VENC_PACK_S
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_PACK_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("VENC_PACK_S")
@@ -502,6 +593,7 @@ impl std::fmt::Debug for VENC_PACK_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_PACK_S
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_PACK_S {
     fn eq(&self, other: &Self) -> bool {
         self.u64PhyAddr == other.u64PhyAddr
@@ -516,16 +608,23 @@ impl PartialEq for VENC_PACK_S {
 }
 
 // Fix incomplete Eq trait for VENC_PACK_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_PACK_S {}
 
 // Fix Default trait for VENC_RC_MODE_E
+#[cfg(feature = "mpi-venc")]
 impl Default for VENC_RC_MODE_E {
     fn default() -> Self {
         VENC_RC_MODE_E::VENC_RC_MODE_H264CBR
     }
 }
 
+// Impl AsRef<VENC_RC_ATTR_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_RC_ATTR_S);
+
 // Fix incomplete Debug trait for VENC_RC_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_RC_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fds = f.debug_struct("VENC_RC_ATTR_S");
@@ -566,6 +665,7 @@ impl std::fmt::Debug for VENC_RC_ATTR_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_RC_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_RC_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         if self.enRcMode != other.enRcMode {
@@ -598,9 +698,15 @@ impl PartialEq for VENC_RC_ATTR_S {
 }
 
 // Fix incomplete Eq trait for VENC_RC_ATTR_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_RC_ATTR_S {}
 
+// Impl AsRef<VENC_STREAM_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_STREAM_S);
+
 // Fix incomplete Debug trait for VENC_STREAM_S
+#[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_STREAM_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fds = f.debug_struct("VENC_STREAM_S");
@@ -612,6 +718,7 @@ impl std::fmt::Debug for VENC_STREAM_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_STREAM_S
+#[cfg(feature = "mpi-venc")]
 impl PartialEq for VENC_STREAM_S {
     fn eq(&self, other: &Self) -> bool {
         self.pstPack == other.pstPack
@@ -621,9 +728,15 @@ impl PartialEq for VENC_STREAM_S {
 }
 
 // Fix incomplete Eq trait for VENC_STREAM_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_STREAM_S {}
 
+// Impl AsRef<VENC_STREAM_INFO_S> for Self
+#[cfg(feature = "mpi-venc")]
+impl_as_ref_for_self!(VENC_STREAM_INFO_S);
+
 // Fix incomplete Eq trait for VENC_STREAM_INFO_S
+#[cfg(feature = "mpi-venc")]
 impl Eq for VENC_STREAM_INFO_S {}
 
 cfg_if::cfg_if! {
