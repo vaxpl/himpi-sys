@@ -44,7 +44,10 @@ hi3518ev200 = []
 hi3518ev300 = []
 hi3519av100 = []
 hi3531v100 = [ "static-link" ]
-hi3559av100 = []
+hi3559av100 = [
+    "mpi-dsp",
+    "mpi-nnie",
+]
 mpi-ae = []
 mpi-audio = []
 mpi-avs = []
