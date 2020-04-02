@@ -272,6 +272,11 @@ fn main() -> Result<(), DynError> {
         linklib!("dsp");
     }
 
+    if cfg!(feature = "mpi-ive") {
+        writeln!(wrapper, "#include <mpi_ive.h>")?;
+        linklib!("ive");
+    }
+
     if cfg!(feature = "mpi-hdmi") {
         writeln!(wrapper, "#include <mpi_hdmi.h>")?;
         //#[cfg(all(feature = "static", feature = "hi3531v100"))]
