@@ -15,6 +15,17 @@
 #![allow(clippy::unreadable_literal)]
 #![allow(clippy::useless_transmute)]
 
+/// Implement AsMut on Self
+macro_rules! impl_as_mut_for_self {
+    ($Type:ty) => {
+        impl AsMut<$Type> for $Type {
+            fn as_mut(&mut self) -> &mut $Type {
+                self
+            }
+        }
+    };
+}
+
 /// Implement AsRef on Self
 macro_rules! impl_as_ref_for_self {
     ($Type:ty) => {
@@ -23,6 +34,14 @@ macro_rules! impl_as_ref_for_self {
                 self
             }
         }
+    };
+}
+
+/// Implement AsMut/AsRef on Self
+macro_rules! impl_as_mut_and_ref_for_self {
+    ($Type:ty) => {
+        impl_as_mut_for_self!($Type);
+        impl_as_ref_for_self!($Type);
     };
 }
 
@@ -76,6 +95,254 @@ impl std::convert::Into<HI_BOOL> for bool {
         }
     }
 }
+
+// Impl AsMut/AsRef<IVE_16BIT_TO_8BIT_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_16BIT_TO_8BIT_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_ADD_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_ADD_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_CANDI_BG_PIX_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_CANDI_BG_PIX_S);
+
+// Impl AsMut/AsRef<IVE_CANNY_HYS_EDGE_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_CANNY_HYS_EDGE_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_CANNY_STACK_SIZE_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_CANNY_STACK_SIZE_S);
+
+// Impl AsMut/AsRef<IVE_CCBLOB_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_CCBLOB_S);
+
+// Impl AsMut/AsRef<IVE_CCL_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_CCL_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_CSC_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_CSC_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_DATA_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_DATA_S);
+
+// Impl AsMut/AsRef<IVE_DILATE_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_DILATE_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_DMA_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_DMA_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_EQUALIZE_HIST_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_EQUALIZE_HIST_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_EQUALIZE_HIST_CTRL_MEM_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_EQUALIZE_HIST_CTRL_MEM_S);
+
+// Impl AsMut/AsRef<IVE_ERODE_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_ERODE_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_FILTER_AND_CSC_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_FILTER_AND_CSC_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_FILTER_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_FILTER_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_GMM_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_GMM_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_GMM2_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_GMM2_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_GRAD_FG_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_GRAD_FG_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_INTEG_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_INTEG_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_IMAGE_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_IMAGE_S);
+
+// Impl AsMut/AsRef<IVE_LBP_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_LBP_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_LK_OPTICAL_FLOW_CTRL_S> for Self
+#[cfg(all(
+    feature = "mpi-ive",
+    any(
+        feature = "hi3536v100",
+        feature = "hi3521av100",
+        feature = "hi3518ev200",
+        feature = "hi3531av100",
+        feature = "hi3536cv100",
+        feature = "hi3531dv100",
+        feature = "hi3521dv100"
+    )
+))]
+impl_as_mut_and_ref_for_self!(IVE_LK_OPTICAL_FLOW_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_LK_OPTICAL_FLOW_PYR_CTRL_S> for Self
+#[cfg(all(
+    feature = "mpi-ive",
+    any(
+        feature = "hi3536v100",
+        feature = "hi3521av100",
+        feature = "hi3518ev200",
+        feature = "hi3531av100",
+        feature = "hi3536cv100",
+        feature = "hi3531dv100",
+        feature = "hi3521dv100"
+    )
+))]
+impl_as_mut_and_ref_for_self!(IVE_LK_OPTICAL_FLOW_PYR_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_MAG_AND_ANG_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_MAG_AND_ANG_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_MAP_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_MAP_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_MAP_LUT_MEM_S> for Self
+#[cfg(all(
+    feature = "mpi-ive",
+    any(
+        feature = "hi3536v100",
+        feature = "hi3521av100",
+        feature = "hi3518ev200",
+        feature = "hi3531av100",
+        feature = "hi3536cv100",
+        feature = "hi3531dv100",
+        feature = "hi3521dv100"
+    )
+))]
+impl_as_mut_and_ref_for_self!(IVE_MAP_LUT_MEM_S);
+
+// Impl AsMut/AsRef<IVE_MAP_S16BIT_LUT_MEM_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_MAP_S16BIT_LUT_MEM_S);
+
+// Impl AsMut/AsRef<IVE_MAP_U8BIT_LUT_MEM_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_MAP_U8BIT_LUT_MEM_S);
+
+// Impl AsMut/AsRef<IVE_MAP_U16BIT_LUT_MEM_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_MAP_U16BIT_LUT_MEM_S);
+
+// Impl AsMut/AsRef<IVE_MEM_INFO_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_MEM_INFO_S);
+
+// Impl AsMut/AsRef<IVE_MV_S9Q7_S> for Self
+#[cfg(all(
+    feature = "mpi-ive",
+    any(
+        feature = "hi3536v100",
+        feature = "hi3521av100",
+        feature = "hi3518ev200",
+        feature = "hi3531av100",
+        feature = "hi3536cv100",
+        feature = "hi3531dv100",
+        feature = "hi3521dv100"
+    )
+))]
+impl_as_mut_and_ref_for_self!(IVE_MV_S9Q7_S);
+
+// Impl AsMut/AsRef<IVE_NCC_DST_MEM_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_NCC_DST_MEM_S);
+
+// Impl AsMut/AsRef<IVE_NORM_GRAD_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_NORM_GRAD_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_ORD_STAT_FILTER_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_ORD_STAT_FILTER_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_RECT_U16_S> for Self
+#[cfg(all(feature = "mpi-ive", feature = "hi3516dv300"))]
+impl_as_mut_and_ref_for_self!(IVE_RECT_U16_S);
+
+// Impl AsMut/AsRef<IVE_RECT_U32_S> for Self
+#[cfg(all(feature = "mpi-ive", feature = "hi3516dv300"))]
+impl_as_mut_and_ref_for_self!(IVE_RECT_U32_S);
+
+// Impl AsMut/AsRef<IVE_REGION_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_REGION_S);
+
+// Impl AsMut/AsRef<IVE_RESIZE_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_RESIZE_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_RESIZE2_CTRL_S> for Self
+#[cfg(all(feature = "mpi-ive", any(feature = "hi3516cv300")))]
+impl_as_mut_and_ref_for_self!(IVE_RESIZE2_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_SAD_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_SAD_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_SOBEL_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_SOBEL_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_ST_CANDI_CORNER_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_ST_CANDI_CORNER_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_ST_CORNER_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_ST_CORNER_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_ST_CORNER_INFO_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_ST_CORNER_INFO_S);
+
+// Impl AsMut/AsRef<IVE_ST_MAX_EIG_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_ST_MAX_EIG_S);
+
+// Impl AsMut/AsRef<IVE_SUB_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_SUB_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_THRESH_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_THRESH_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_THRESH_S16_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_THRESH_S16_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_THRESH_U16_CTRL_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_THRESH_U16_CTRL_S);
+
+// Impl AsMut/AsRef<IVE_WORK_BG_PIX_S> for Self
+#[cfg(feature = "mpi-ive")]
+impl_as_mut_and_ref_for_self!(IVE_WORK_BG_PIX_S);
 
 // Impl AsRef<SVP_BLOB_S> for Self
 #[cfg(feature = "mpi-nnie")]
