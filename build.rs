@@ -267,9 +267,27 @@ fn main() -> Result<(), DynError> {
         }
     }
 
+    if cfg!(feature = "mpi-ae") {
+        writeln!(wrapper, "#include <mpi_ae.h>")?;
+    }
+
+    if cfg!(feature = "mpi-avs") {
+        writeln!(wrapper, "#include <mpi_avs.h>")?;
+    }
+
     if cfg!(feature = "mpi-dsp") {
         writeln!(wrapper, "#include <mpi_dsp.h>")?;
         linklib!("dsp");
+    }
+
+    if cfg!(feature = "mpi-gdc") {
+        writeln!(wrapper, "#include <mpi_gdc.h>")?;
+    }
+
+    if cfg!(feature = "mpi-isp") {
+        writeln!(wrapper, "#include <mpi_isp.h>")?;
+        writeln!(wrapper, "#include <hi_sns_ctrl.h>")?;
+        linklib!("isp");
     }
 
     if cfg!(feature = "mpi-ive") {
@@ -288,12 +306,20 @@ fn main() -> Result<(), DynError> {
         linklib!("nnie");
     }
 
+    if cfg!(feature = "mpi-region") {
+        writeln!(wrapper, "#include <mpi_region.h>")?;
+    }
+
     if cfg!(feature = "mpi-vdec") {
         writeln!(wrapper, "#include <mpi_vdec.h>")?;
     }
 
     if cfg!(feature = "mpi-venc") {
         writeln!(wrapper, "#include <mpi_venc.h>")?;
+    }
+
+    if cfg!(feature = "mpi-vgs") {
+        writeln!(wrapper, "#include <mpi_vgs.h>")?;
     }
 
     if cfg!(feature = "mpi-vi") {

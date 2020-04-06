@@ -15,68 +15,12 @@
 #![allow(clippy::unreadable_literal)]
 #![allow(clippy::useless_transmute)]
 
-/// Implement AsMut on Self
-macro_rules! impl_as_mut_for_self {
-    ($Type:ty) => {
-        impl AsMut<$Type> for $Type {
-            fn as_mut(&mut self) -> &mut $Type {
-                self
-            }
-        }
-    };
-}
-
-/// Implement AsRef on Self
-macro_rules! impl_as_ref_for_self {
-    ($Type:ty) => {
-        impl AsRef<$Type> for $Type {
-            fn as_ref(&self) -> &$Type {
-                self
-            }
-        }
-    };
-}
-
-/// Implement AsMut/AsRef on Self
-macro_rules! impl_as_mut_and_ref_for_self {
-    ($Type:ty) => {
-        impl_as_mut_for_self!($Type);
-        impl_as_ref_for_self!($Type);
-    };
-}
+use pavo_traits::{impl_as_bundle_many, AsPtr, AsPtrMut};
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 // Fix missing types.
 pub type HI_VOID = ::std::os::raw::c_void;
-
-// Fix incomplete Eq trait for MPP_BIND_DEST_S.
-#[cfg(not(feature = "hi3531v100"))]
-impl std::cmp::Eq for MPP_BIND_DEST_S {}
-
-// Fix incomplete Eq trait for MPP_VERSION_S.
-impl std::cmp::Eq for MPP_VERSION_S {}
-
-// Fix incomplete Debug trait for MPP_BIND_DEST_S
-#[cfg(not(feature = "hi3531v100"))]
-impl std::fmt::Debug for MPP_BIND_DEST_S {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // FIXME:
-        write!(
-            f,
-            "MPP_BIND_DEST_S {{ u32Num: {}, astMppChn: [...] }}",
-            self.u32Num
-        )
-    }
-}
-
-// Fix incomplete Debug trait for MPP_VERSION_S
-impl std::fmt::Debug for MPP_VERSION_S {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let s = std::ffi::CStr::from_bytes_with_nul(&self.aVersion).unwrap_or_default();
-        write!(f, "MPP_VERSION_S {{ aVersion: {} }}", s.to_string_lossy())
-    }
-}
 
 /// Make HI_BOOL can convert to bool.
 impl std::convert::Into<bool> for HI_BOOL {
@@ -96,95 +40,190 @@ impl std::convert::Into<HI_BOOL> for bool {
     }
 }
 
-// Impl AsMut/AsRef<IVE_16BIT_TO_8BIT_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_16BIT_TO_8BIT_CTRL_S);
+impl_as_bundle_many!(POINT_S, RECT_S, SIZE_S,);
 
-// Impl AsMut/AsRef<IVE_ADD_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_ADD_CTRL_S);
+#[cfg(feature = "mpi-avs")]
+impl_as_bundle_many!(
+    AVS_CHN_ATTR_S,
+    AVS_CUBE_MAP_ATTR_S,
+    AVS_FOV_S,
+    AVS_GAIN_ATTR_S,
+    AVS_GRP_ATTR_S,
+    AVS_MOD_PARAM_S,
+    AVS_OUTPUT_ATTR_S,
+    AVS_ROTATION_S,
+    AVS_SPLIT_ATTR_S,
+);
 
-// Impl AsMut/AsRef<IVE_CANDI_BG_PIX_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_CANDI_BG_PIX_S);
+#[cfg(feature = "mpi-gdc")]
+impl_as_bundle_many!(
+    FISHEYE_ATTR_S,
+    FISHEYE_CONFIG_S,
+    FISHEYE_JOB_CONFIG_S,
+    FISHEYE_REGION_ATTR_S,
+    GDC_PMF_ATTR_S,
+    GDC_TASK_ATTR_S,
+    SPREAD_ATTR_S,
+);
 
-// Impl AsMut/AsRef<IVE_CANNY_HYS_EDGE_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_CANNY_HYS_EDGE_CTRL_S);
+#[cfg(feature = "mpi-hdmi")]
+impl_as_bundle_many!(
+    HI_CEC_RAWDATA_S,
+    HI_HDMI_ATTR_S,
+    HI_HDMI_AUD_INFOFRAME_VER1_S,
+    HI_HDMI_AUDIO_INFO_S,
+    HI_HDMI_AVI_INFOFRAME_VER2_S,
+    HI_HDMI_CALLBACK_FUNC_S,
+    HI_HDMI_CEC_CMD_S,
+    HI_HDMI_CEC_STATUS_S,
+    HI_HDMI_CECCALLBACK_FUNC_S,
+    HI_HDMI_DET_TIMING_S,
+    HI_HDMI_EDID_S,
+    HI_HDMI_EOTF_S,
+    HI_HDMI_HDR_CAP_S,
+    HI_HDMI_HDR_METADATA_TYPE_S,
+    HI_HDMI_INFOFRAME_S,
+    HI_HDMI_MOD_PARAM_S,
+    HI_HDMI_MPEGSOURCE_INFOFRAME_S,
+    HI_HDMI_SINK_CAPABILITY_S,
+    HI_HDMI_SPD_INFOFRAME_S,
+    HI_HDMI_TIMING_INFO_S,
+    HI_HDMI_VENDORSPEC_INFOFRAME_S
+);
 
-// Impl AsMut/AsRef<IVE_CANNY_STACK_SIZE_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_CANNY_STACK_SIZE_S);
+#[cfg(feature = "mpi-isp")]
+impl_as_bundle_many!(
+    ALG_LIB_S,
+    ISP_AE_EXP_FUNC_S,
+    ISP_AE_INFO_S,
+    ISP_AE_PARAM_S,
+    ISP_AE_REGISTER_S,
+    ISP_AE_RESULT_S,
+    ISP_AE_STAT_ATTR_S,
+    ISP_AWB_Calibration_Gain_S,
+    ISP_AWB_EXP_FUNC_S,
+    ISP_AWB_INFO_S,
+    ISP_AWB_PARAM_S,
+    ISP_AWB_RAW_STAT_ATTR_S,
+    ISP_AWB_REGISTER_S,
+    ISP_AWB_RESULT_S,
+    ISP_AWB_STAT_1_S,
+    ISP_CTRL_PARAM_S,
+    ISP_CTRL_PROC_WRITE_S,
+    ISP_CMOS_ANTIFALSECOLOR_S,
+    ISP_CMOS_BAYERNR_S,
+    ISP_CMOS_BLACK_LEVEL_S,
+    ISP_CMOS_CA_S,
+    ISP_CMOS_CLUT_S,
+    // ISP_CMOS_DEHAZE_S,
+    ISP_CMOS_DEMOSAIC_S,
+    ISP_CMOS_DEFAULT_S,
+    // ISP_CMOS_DETAIL_S,
+    ISP_CMOS_DNG_COLORPARAM_S,
+    ISP_CMOS_DPC_S,
+    ISP_CMOS_DRC_S,
+    ISP_CMOS_EDGEMARK_S,
+    // ISP_CMOS_EXPANDER_POINT_S,
+    // ISP_CMOS_EXPANDER_S,
+    ISP_CMOS_GAMMA_S,
+    ISP_CMOS_GE_S,
+    // ISP_CMOS_HLC_S,
+    ISP_CMOS_LDCI_S,
+    ISP_CMOS_LOGLUT_S,
+    ISP_CMOS_LSC_S,
+    ISP_CMOS_NOISE_CALIBRATION_S,
+    ISP_CMOS_PREGAMMA_S,
+    ISP_CMOS_PRELOGLUT_S,
+    // ISP_CMOS_RGBIR_S,
+    ISP_CMOS_RLSC_S,
+    ISP_CMOS_SENSOR_IMAGE_MODE_S,
+    ISP_CMOS_SENSOR_MAX_RESOLUTION_S,
+    ISP_CMOS_SENSOR_MODE_S,
+    // ISP_CMOS_SHARPEN_AUTO_S,
+    // ISP_CMOS_SHARPEN_MANUAL_S,
+    ISP_CMOS_SHARPEN_S,
+    ISP_CMOS_SPLIT_POINT_S,
+    ISP_CMOS_SPLIT_S,
+    ISP_CMOS_WDR_S,
+    ISP_CMOS_WDR_SWITCH_ATTR_S,
+    ISP_CONFIG_INFO_S,
+    ISP_DCF_CONST_INFO_S,
+    ISP_DCF_INFO_S,
+    ISP_DCF_UPDATE_INFO_S,
+    ISP_INIT_ATTR_S,
+    ISP_LSC_CABLI_TABLE_S,
+    ISP_MOD_PARAM_S,
+    ISP_PIPE_DIFF_ATTR_S,
+    ISP_PUB_ATTR_S,
+    ISP_RLSC_CABLI_TABLE_S,
+    ISP_SENSOR_EXP_FUNC_S,
+    ISP_SENSOR_REGISTER_S,
+    ISP_SLAVE_SNS_SYNC_S,
+    ISP_SNS_ATTR_INFO_S,
+    ISP_SNS_OBJ_S,
+    ISP_SNS_REGS_INFO_S,
+    ISP_SNS_STATE_S,
+    ISP_SPECAWB_ATTR_S,
+    ISP_SPECAWB_BBL_TBL_S,
+    ISP_SPECAWB_CAA_CONTROl_S,
+    ISP_SPECAWB_CAA_CONVERSION_S,
+    ISP_SPECAWB_CAA_TBL_S,
+    ISP_SPECAWB_FACTTBL_ELEMENT_S,
+    ISP_SPECAWB_KELVIN_DBB_MAP_S,
+    ISP_SPECKCWB_S,
+    ISP_SPECKCWBS16_S,
+    ISP_STITCH_ATTR_S,
+    ISP_WDR_MODE_S,
+);
 
-// Impl AsMut/AsRef<IVE_CCBLOB_S> for Self
 #[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_CCBLOB_S);
+impl_as_bundle_many!(
+    IVE_16BIT_TO_8BIT_CTRL_S,
+    IVE_ADD_CTRL_S,
+    IVE_CANDI_BG_PIX_S,
+    IVE_CANNY_HYS_EDGE_CTRL_S,
+    IVE_CANNY_STACK_SIZE_S,
+    IVE_CCBLOB_S,
+    IVE_CCL_CTRL_S,
+    IVE_CSC_CTRL_S,
+    IVE_DATA_S,
+    IVE_DILATE_CTRL_S,
+    IVE_DMA_CTRL_S,
+    IVE_EQUALIZE_HIST_CTRL_S,
+    IVE_EQUALIZE_HIST_CTRL_MEM_S,
+    IVE_ERODE_CTRL_S,
+    IVE_FILTER_AND_CSC_CTRL_S,
+    IVE_FILTER_CTRL_S,
+    IVE_GMM_CTRL_S,
+    IVE_GMM2_CTRL_S,
+    IVE_GRAD_FG_CTRL_S,
+    IVE_INTEG_CTRL_S,
+    IVE_IMAGE_S,
+    IVE_LBP_CTRL_S,
+    IVE_MAG_AND_ANG_CTRL_S,
+    IVE_MAP_CTRL_S,
+    IVE_MAP_S16BIT_LUT_MEM_S,
+    IVE_MAP_U8BIT_LUT_MEM_S,
+    IVE_MAP_U16BIT_LUT_MEM_S,
+    IVE_MEM_INFO_S,
+    IVE_NCC_DST_MEM_S,
+    IVE_NORM_GRAD_CTRL_S,
+    IVE_ORD_STAT_FILTER_CTRL_S,
+    IVE_REGION_S,
+    IVE_RESIZE_CTRL_S,
+    IVE_SAD_CTRL_S,
+    IVE_SOBEL_CTRL_S,
+    IVE_ST_CANDI_CORNER_CTRL_S,
+    IVE_ST_CORNER_CTRL_S,
+    IVE_ST_CORNER_INFO_S,
+    IVE_ST_MAX_EIG_S,
+    IVE_SUB_CTRL_S,
+    IVE_THRESH_CTRL_S,
+    IVE_THRESH_S16_CTRL_S,
+    IVE_THRESH_U16_CTRL_S,
+    IVE_WORK_BG_PIX_S,
+);
 
-// Impl AsMut/AsRef<IVE_CCL_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_CCL_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_CSC_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_CSC_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_DATA_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_DATA_S);
-
-// Impl AsMut/AsRef<IVE_DILATE_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_DILATE_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_DMA_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_DMA_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_EQUALIZE_HIST_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_EQUALIZE_HIST_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_EQUALIZE_HIST_CTRL_MEM_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_EQUALIZE_HIST_CTRL_MEM_S);
-
-// Impl AsMut/AsRef<IVE_ERODE_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_ERODE_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_FILTER_AND_CSC_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_FILTER_AND_CSC_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_FILTER_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_FILTER_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_GMM_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_GMM_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_GMM2_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_GMM2_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_GRAD_FG_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_GRAD_FG_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_INTEG_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_INTEG_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_IMAGE_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_IMAGE_S);
-
-// Impl AsMut/AsRef<IVE_LBP_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_LBP_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_LK_OPTICAL_FLOW_CTRL_S> for Self
 #[cfg(all(
     feature = "mpi-ive",
     any(
@@ -197,156 +236,28 @@ impl_as_mut_and_ref_for_self!(IVE_LBP_CTRL_S);
         feature = "hi3521dv100"
     )
 ))]
-impl_as_mut_and_ref_for_self!(IVE_LK_OPTICAL_FLOW_CTRL_S);
+impl_as_bundle_many!(
+    IVE_LK_OPTICAL_FLOW_CTRL_S,
+    IVE_LK_OPTICAL_FLOW_PYR_CTRL_S,
+    IVE_MAP_LUT_MEM_S,
+    IVE_MV_S9Q7_S,
+);
 
-// Impl AsMut/AsRef<IVE_LK_OPTICAL_FLOW_PYR_CTRL_S> for Self
-#[cfg(all(
-    feature = "mpi-ive",
-    any(
-        feature = "hi3536v100",
-        feature = "hi3521av100",
-        feature = "hi3518ev200",
-        feature = "hi3531av100",
-        feature = "hi3536cv100",
-        feature = "hi3531dv100",
-        feature = "hi3521dv100"
-    )
-))]
-impl_as_mut_and_ref_for_self!(IVE_LK_OPTICAL_FLOW_PYR_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_MAG_AND_ANG_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_MAG_AND_ANG_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_MAP_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_MAP_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_MAP_LUT_MEM_S> for Self
-#[cfg(all(
-    feature = "mpi-ive",
-    any(
-        feature = "hi3536v100",
-        feature = "hi3521av100",
-        feature = "hi3518ev200",
-        feature = "hi3531av100",
-        feature = "hi3536cv100",
-        feature = "hi3531dv100",
-        feature = "hi3521dv100"
-    )
-))]
-impl_as_mut_and_ref_for_self!(IVE_MAP_LUT_MEM_S);
-
-// Impl AsMut/AsRef<IVE_MAP_S16BIT_LUT_MEM_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_MAP_S16BIT_LUT_MEM_S);
-
-// Impl AsMut/AsRef<IVE_MAP_U8BIT_LUT_MEM_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_MAP_U8BIT_LUT_MEM_S);
-
-// Impl AsMut/AsRef<IVE_MAP_U16BIT_LUT_MEM_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_MAP_U16BIT_LUT_MEM_S);
-
-// Impl AsMut/AsRef<IVE_MEM_INFO_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_MEM_INFO_S);
-
-// Impl AsMut/AsRef<IVE_MV_S9Q7_S> for Self
-#[cfg(all(
-    feature = "mpi-ive",
-    any(
-        feature = "hi3536v100",
-        feature = "hi3521av100",
-        feature = "hi3518ev200",
-        feature = "hi3531av100",
-        feature = "hi3536cv100",
-        feature = "hi3531dv100",
-        feature = "hi3521dv100"
-    )
-))]
-impl_as_mut_and_ref_for_self!(IVE_MV_S9Q7_S);
-
-// Impl AsMut/AsRef<IVE_NCC_DST_MEM_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_NCC_DST_MEM_S);
-
-// Impl AsMut/AsRef<IVE_NORM_GRAD_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_NORM_GRAD_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_ORD_STAT_FILTER_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_ORD_STAT_FILTER_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_RECT_U16_S> for Self
-#[cfg(all(feature = "mpi-ive", feature = "hi3516dv300"))]
-impl_as_mut_and_ref_for_self!(IVE_RECT_U16_S);
-
-// Impl AsMut/AsRef<IVE_RECT_U32_S> for Self
-#[cfg(all(feature = "mpi-ive", feature = "hi3516dv300"))]
-impl_as_mut_and_ref_for_self!(IVE_RECT_U32_S);
-
-// Impl AsMut/AsRef<IVE_REGION_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_REGION_S);
-
-// Impl AsMut/AsRef<IVE_RESIZE_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_RESIZE_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_RESIZE2_CTRL_S> for Self
 #[cfg(all(feature = "mpi-ive", any(feature = "hi3516cv300")))]
-impl_as_mut_and_ref_for_self!(IVE_RESIZE2_CTRL_S);
+impl_as_bundle_many!(IVE_RESIZE2_CTRL_S,);
 
-// Impl AsMut/AsRef<IVE_SAD_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_SAD_CTRL_S);
+#[cfg(all(feature = "mpi-ive", any(feature = "hi3516dv300")))]
+impl_as_bundle_many!(IVE_RECT_U16_S, IVE_RECT_U32_S,);
 
-// Impl AsMut/AsRef<IVE_SOBEL_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_SOBEL_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_ST_CANDI_CORNER_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_ST_CANDI_CORNER_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_ST_CORNER_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_ST_CORNER_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_ST_CORNER_INFO_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_ST_CORNER_INFO_S);
-
-// Impl AsMut/AsRef<IVE_ST_MAX_EIG_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_ST_MAX_EIG_S);
-
-// Impl AsMut/AsRef<IVE_SUB_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_SUB_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_THRESH_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_THRESH_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_THRESH_S16_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_THRESH_S16_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_THRESH_U16_CTRL_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_THRESH_U16_CTRL_S);
-
-// Impl AsMut/AsRef<IVE_WORK_BG_PIX_S> for Self
-#[cfg(feature = "mpi-ive")]
-impl_as_mut_and_ref_for_self!(IVE_WORK_BG_PIX_S);
-
-// Impl AsRef<SVP_BLOB_S> for Self
 #[cfg(feature = "mpi-nnie")]
-impl_as_ref_for_self!(SVP_BLOB_S);
+impl_as_bundle_many!(
+    SVP_BLOB_S,
+    SVP_NNIE_FORWARD_CTRL_S,
+    SVP_NNIE_FORWARD_WITHBBOX_CTRL_S,
+    SVP_NNIE_MODEL_S,
+    SVP_NNIE_NODE_S,
+    SVP_NNIE_SEG_S,
+);
 
 // Fix incomplete Debug trait for SVP_BLOB_S
 #[cfg(feature = "mpi-nnie")]
@@ -385,18 +296,6 @@ impl PartialEq for SVP_BLOB_S {
 #[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_BLOB_S {}
 
-// Impl AsRef<SVP_NNIE_FORWARD_CTRL_S> for Self
-#[cfg(feature = "mpi-nnie")]
-impl_as_ref_for_self!(SVP_NNIE_FORWARD_CTRL_S);
-
-// Impl AsRef<SVP_NNIE_FORWARD_WITHBBOX_CTRL_S> for Self
-#[cfg(feature = "mpi-nnie")]
-impl_as_ref_for_self!(SVP_NNIE_FORWARD_WITHBBOX_CTRL_S);
-
-// Impl AsRef<SVP_NNIE_NODE_S> for Self
-#[cfg(feature = "mpi-nnie")]
-impl_as_ref_for_self!(SVP_NNIE_NODE_S);
-
 // Fix incomplete Debug trait for SVP_NNIE_NODE_S
 #[cfg(feature = "mpi-nnie")]
 impl std::fmt::Debug for SVP_NNIE_NODE_S {
@@ -431,10 +330,6 @@ impl PartialEq for SVP_NNIE_NODE_S {
 #[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_NNIE_NODE_S {}
 
-// Impl AsRef<SVP_NNIE_MODEL_S> for Self
-#[cfg(feature = "mpi-nnie")]
-impl_as_ref_for_self!(SVP_NNIE_MODEL_S);
-
 // Fix incomplete Debug trait for SVP_NNIE_MODEL_S
 #[cfg(feature = "mpi-nnie")]
 impl std::fmt::Debug for SVP_NNIE_MODEL_S {
@@ -465,10 +360,6 @@ impl PartialEq for SVP_NNIE_MODEL_S {
 
 // Fix incomplete Eq trait for SVP_NNIE_MODEL_S
 impl Eq for SVP_NNIE_MODEL_S {}
-
-// Impl AsRef<SVP_NNIE_SEG_S> for Self
-#[cfg(feature = "mpi-nnie")]
-impl_as_ref_for_self!(SVP_NNIE_SEG_S);
 
 // Fix incomplete Debug trait for SVP_NNIE_SEG_S
 #[cfg(feature = "mpi-nnie")]
@@ -510,9 +401,90 @@ impl PartialEq for SVP_NNIE_SEG_S {
 #[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_NNIE_SEG_S {}
 
-// Impl AsRef<VDEC_CHN_ATTR_S> for Self
+#[cfg(feature = "mpi-region")]
+impl_as_bundle_many!(
+    COVER_CHN_ATTR_S,
+    COVEREX_CHN_ATTR_S,
+    MOSAIC_CHN_ATTR_S,
+    RGN_ATTR_S,
+    RGN_CANVAS_INFO_S,
+    RGN_CHN_ATTR_S,
+    RGN_QUADRANGLE_S,
+    OVERLAY_QP_INFO_S,
+    OVERLAY_ATTR_S,
+    OVERLAY_CHN_ATTR_S,
+    OVERLAY_INVERT_COLOR_S,
+    OVERLAYEX_ATTR_S,
+    OVERLAYEX_CHN_ATTR_S,
+);
+
+#[cfg(feature = "mpi-sys")]
+impl_as_bundle_many!(
+    GPS_INFO_S,
+    MPP_BIND_DEST_S,
+    MPP_CHN_S,
+    MPP_SYS_CONFIG_S,
+    MPP_VERSION_S,
+    SCALE_COEFF_LEVEL_S,
+    SYS_VIRMEM_INFO_S,
+    VI_VPSS_MODE_S,
+);
+
+#[cfg(all(
+    feature = "mpi-sys",
+    any(feature = "hi3559av100", feature = "hi3519av100")
+))]
+impl_as_bundle_many!(RAW_FRAME_COMPRESS_PARAM_S,);
+
+// Fix incomplete Debug trait for MPP_BIND_DEST_S
+#[cfg(not(feature = "hi3531v100"))]
+impl std::fmt::Debug for MPP_BIND_DEST_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // FIXME:
+        write!(
+            f,
+            "MPP_BIND_DEST_S {{ u32Num: {}, astMppChn: [...] }}",
+            self.u32Num
+        )
+    }
+}
+
+// Fix incomplete Eq trait for MPP_BIND_DEST_S.
+#[cfg(not(feature = "hi3531v100"))]
+impl std::cmp::Eq for MPP_BIND_DEST_S {}
+
+// Fix incomplete Debug trait for MPP_VERSION_S
+impl std::fmt::Debug for MPP_VERSION_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = std::ffi::CStr::from_bytes_with_nul(&self.aVersion).unwrap_or_default();
+        write!(f, "MPP_VERSION_S {{ aVersion: {} }}", s.to_string_lossy())
+    }
+}
+
+// Fix incomplete Eq trait for MPP_VERSION_S.
+impl std::cmp::Eq for MPP_VERSION_S {}
+
+// Impl AsMut/AsRef/AsPtr/AsPtrMut of VB_CAL_CONFIG_S
+#[cfg(feature = "mpi-vb")]
+impl_as_bundle_many!(VB_CAL_CONFIG_S, VB_CONFIG_S, VB_POOL_CONFIG_S,);
+
 #[cfg(feature = "mpi-vdec")]
-impl_as_ref_for_self!(VDEC_CHN_ATTR_S);
+impl_as_bundle_many!(
+    H264_PRTCL_PARAM_S,
+    H265_PRTCL_PARAM_S,
+    VDEC_ATTR_VIDEO_S,
+    VDEC_CHN_ATTR_S,
+    VDEC_CHN_PARAM_S,
+    VDEC_CHN_POOL_S,
+    VDEC_CHN_STATUS_S,
+    VDEC_MOD_PARAM_S,
+    VDEC_PARAM_VIDEO_S,
+    VDEC_PARAM_PICTURE_S,
+    VDEC_PRTCL_PARAM_S,
+    VDEC_STREAM_S,
+    VDEC_USERDATA_S,
+    VDEC_VIDEO_MOD_PARAM_S,
+);
 
 // Fix incomplete Debug trait for VDEC_CHN_ATTR_S
 #[cfg(feature = "mpi-vdec")]
@@ -553,10 +525,6 @@ impl PartialEq for VDEC_CHN_ATTR_S {
 // Fix incomplete Eq trait for VDEC_CHN_ATTR_S
 #[cfg(feature = "mpi-vdec")]
 impl Eq for VDEC_CHN_ATTR_S {}
-
-// Impl AsRef<VDEC_CHN_PARAM_S> for Self
-#[cfg(feature = "mpi-vdec")]
-impl_as_ref_for_self!(VDEC_CHN_PARAM_S);
 
 // Fix incomplete Debug trait for VDEC_CHN_PARAM_S
 #[cfg(feature = "mpi-vdec")]
@@ -601,10 +569,6 @@ impl PartialEq for VDEC_CHN_PARAM_S {
 #[cfg(feature = "mpi-vdec")]
 impl Eq for VDEC_CHN_PARAM_S {}
 
-// Impl AsRef<VDEC_PRTCL_PARAM_S> for Self
-#[cfg(feature = "mpi-vdec")]
-impl_as_ref_for_self!(VDEC_PRTCL_PARAM_S);
-
 // Fix incomplete Debug trait for VDEC_PRTCL_PARAM_S
 #[cfg(feature = "mpi-vdec")]
 impl std::fmt::Debug for VDEC_PRTCL_PARAM_S {
@@ -639,13 +603,58 @@ impl PartialEq for VDEC_PRTCL_PARAM_S {
     }
 }
 
-// Fix incomplete Eq trait for VDEC_PRTCL_PARAM_S
-#[cfg(feature = "mpi-vdec")]
-impl Eq for VDEC_PRTCL_PARAM_S {}
-
-// Impl AsRef<VENC_ATTR_S> for Self
 #[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_ATTR_S);
+impl_as_bundle_many!(
+    VENC_ATTR_H264_S,
+    VENC_ATTR_H265_S,
+    VENC_ATTR_JPEG_S,
+    VENC_ATTR_MJPEG_S,
+    VENC_ATTR_PRORES_S,
+    VENC_ATTR_S,
+    VENC_CHN_ATTR_S,
+    VENC_CHN_STATUS_S,
+    VENC_GOP_ATTR_S,
+    VENC_GOP_ADVSMARTP_S,
+    VENC_GOP_BIPREDB_S,
+    VENC_GOP_DUALP_S,
+    VENC_GOP_NORMALP_S,
+    VENC_GOP_SMARTP_S,
+    VENC_H264_DBLK_S,
+    VENC_H264_ENTROPY_S,
+    VENC_H264_INTRA_PRED_S,
+    VENC_H264_SLICE_SPLIT_S,
+    VENC_H264_TRANS_S,
+    VENC_H264_VUI_S,
+    VENC_H265_VUI_S,
+    VENC_JPEG_PARAM_S,
+    VENC_MJPEG_PARAM_S,
+    VENC_MPF_CFG_S,
+    VENC_PACK_INFO_S,
+    VENC_PACK_S,
+    VENC_RC_ATTR_S,
+    VENC_RECV_PIC_PARAM_S,
+    VENC_REF_PARAM_S,
+    VENC_ROI_ATTR_S,
+    VENC_ROI_ATTR_EX_S,
+    VENC_ROIBG_FRAME_RATE_S,
+    VENC_SSE_INFO_S,
+    VENC_STREAM_ADVANCE_INFO_H264_S,
+    VENC_STREAM_ADVANCE_INFO_H265_S,
+    VENC_STREAM_ADVANCE_INFO_JPEG_S,
+    VENC_STREAM_ADVANCE_INFO_PRORES_S,
+    VENC_STREAM_BUF_INFO_S,
+    VENC_STREAM_INFO_H264_S,
+    VENC_STREAM_INFO_H265_S,
+    VENC_STREAM_INFO_JPEG_S,
+    VENC_STREAM_INFO_PRORES_S,
+    VENC_STREAM_INFO_S,
+    VENC_STREAM_S,
+    VENC_VUI_ASPECT_RATIO_S,
+    VENC_VUI_BITSTREAM_RESTRIC_S,
+    VENC_VUI_H264_TIME_INFO_S,
+    VENC_VUI_H265_TIME_INFO_S,
+    VENC_VUI_VIDEO_SIGNAL_S,
+);
 
 // Fix incomplete Debug trait for VENC_ATTR_S
 #[cfg(feature = "mpi-venc")]
@@ -692,10 +701,6 @@ impl PartialEq for VENC_ATTR_S {
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_ATTR_S {}
 
-// Impl AsRef<VENC_CHN_ATTR_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_CHN_ATTR_S);
-
 // Fix incomplete Debug trait for VENC_CHN_ATTR_S
 #[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_CHN_ATTR_S {
@@ -721,10 +726,6 @@ impl PartialEq for VENC_CHN_ATTR_S {
 // Fix incomplete Eq trait for VENC_CHN_ATTR_S
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_CHN_ATTR_S {}
-
-// Impl AsRef<VENC_CHN_STATUS_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_CHN_STATUS_S);
 
 // Fix missing Eq trait for VENC_CHN_STATUS_S
 #[cfg(feature = "mpi-venc")]
@@ -767,10 +768,6 @@ impl PartialEq for VENC_DATA_TYPE_U {
 // Fix incomplete Eq trait for VENC_GOP_ATTR_S
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_DATA_TYPE_U {}
-
-// Impl AsRef<VENC_GOP_ATTR_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_GOP_ATTR_S);
 
 // Fix incomplete Debug trait for VENC_GOP_ATTR_S
 #[cfg(feature = "mpi-venc")]
@@ -819,10 +816,6 @@ impl PartialEq for VENC_GOP_ATTR_S {
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_GOP_ATTR_S {}
 
-// Impl AsRef<VENC_PACK_INFO_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_PACK_INFO_S);
-
 // Fix incomplete Debug trait for VENC_PACK_INFO_S
 #[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_PACK_INFO_S {
@@ -848,10 +841,6 @@ impl PartialEq for VENC_PACK_INFO_S {
 // Fix incomplete Eq trait for VENC_PACK_INFO_S
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_PACK_INFO_S {}
-
-// Impl AsRef<VENC_PACK_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_PACK_S);
 
 // Fix incomplete Debug trait for VENC_PACK_S
 #[cfg(feature = "mpi-venc")]
@@ -897,10 +886,6 @@ impl Default for VENC_RC_MODE_E {
         VENC_RC_MODE_E::VENC_RC_MODE_H264CBR
     }
 }
-
-// Impl AsRef<VENC_RC_ATTR_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_RC_ATTR_S);
 
 // Fix incomplete Debug trait for VENC_RC_ATTR_S
 #[cfg(feature = "mpi-venc")]
@@ -980,10 +965,6 @@ impl PartialEq for VENC_RC_ATTR_S {
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_RC_ATTR_S {}
 
-// Impl AsRef<VENC_STREAM_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_STREAM_S);
-
 // Fix incomplete Debug trait for VENC_STREAM_S
 #[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_STREAM_S {
@@ -1010,13 +991,144 @@ impl PartialEq for VENC_STREAM_S {
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_STREAM_S {}
 
-// Impl AsRef<VENC_STREAM_INFO_S> for Self
-#[cfg(feature = "mpi-venc")]
-impl_as_ref_for_self!(VENC_STREAM_INFO_S);
-
 // Fix incomplete Eq trait for VENC_STREAM_INFO_S
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_STREAM_INFO_S {}
+
+#[cfg(feature = "mpi-vgs")]
+impl_as_bundle_many!(
+    VGS_ADD_COVER_S,
+    VGS_OSD_REVERT_S,
+    VGS_MODULE_PARAMS_S
+    VGS_QUADRANGLE_COVER_S,
+    VGS_TASK_ATTR_S,
+);
+
+#[cfg(feature = "mpi-vi")]
+impl_as_bundle_many!(
+    BNR_DUMP_ATTR_S,
+    DIS_ATTR_S,
+    DIS_CONFIG_S,
+    NRX_PARAM_AUTO_V1_S,
+    NRX_PARAM_MANUAL_V1_S,
+    NRX_PARAM_V1_S,
+    NRX_PARAM_AUTO_V2_S,
+    NRX_PARAM_MANUAL_V2_S,
+    NRX_PARAM_V2_S,
+    VI_BAS_ATTR_S,
+    VI_BAS_REPHASE_ATTR_S,
+    VI_BAS_SCALE_ATTR_S,
+    VI_BT656_SYNC_CFG_S,
+    VI_CHN_ATTR_S,
+    VI_CHN_STATUS_S,
+    VI_CMP_PARAM_S,
+    VI_CROP_INFO_S,
+    VI_DEV_ATTR_S,
+    VI_DEV_ATTR_EX_S,
+    VI_DEV_BIND_PIPE_S,
+    VI_DEV_TIMING_ATTR_S,
+    VI_DUMP_ATTR_S,
+    VI_EARLY_INTERRUPT_S,
+    VI_EXT_CHN_ATTR_S,
+    VI_LDC_ATTR_S,
+    VI_LDCV2_ATTR_S,
+    VI_LDCV3_ATTR_S,
+    VI_LOW_DELAY_INFO_S,
+    VI_MOD_PARAM_S,
+    VI_NR_ATTR_S,
+    VI_PIPE_ATTR_S,
+    VI_PIPE_NRX_PARAM_V1_S,
+    VI_PIPE_NRX_PARAM_V2_S,
+    VI_PIPE_NRX_PARAM_S,
+    VI_PIPE_STATUS_S,
+    VI_ROTATION_EX_ATTR_S,
+    VI_STITCH_GRP_ATTR_S,
+    VI_SYNC_CFG_S,
+    VI_TIMING_BLANK_S,
+    VI_USERPIC_ATTR_S,
+    VI_USERPIC_BGC_S,
+    VI_VS_SIGNAL_ATTR_S,
+    VI_WDR_ATTR_S,
+);
+
+#[cfg(feature = "mpi-video")]
+impl_as_bundle_many!(
+    ASPECT_RATIO_S,
+    BITMAP_S,
+    VIDEO_FRAME_S,
+    VIDEO_FRAME_INFO_S,
+    VIDEO_REGION_INFO_S,
+    VIDEO_SUPPLEMENT_S,
+);
+
+#[cfg(feature = "mpi-vo")]
+impl_as_bundle_many!(
+    VO_BORDER_S,
+    VO_CHN_ATTR_S,
+    VO_CHN_BOUNDARY_S,
+    VO_CHN_PARAM_S,
+    VO_CSC_S,
+    VO_LAYER_BOUNDARY_S,
+    VO_LAYER_PARAM_S,
+    VO_MOD_PARAM_S,
+    VO_PUB_ATTR_S,
+    VO_QUERY_STATUS_S,
+    VO_REGION_INFO_S,
+    VO_USER_INTFSYNC_ATTR_S,
+    VO_USER_INTFSYNC_INFO_S,
+    VO_USER_INTFSYNC_PLL_S,
+    VO_VIDEO_LAYER_ATTR_S,
+    VO_WBC_ATTR_S,
+    VO_WBC_SOURCE_S,
+    VO_ZOOM_RATIO_S,
+);
+
+#[cfg(feature = "mpi-vpss")]
+impl_as_bundle_many!(
+    VPSS_CHN_ATTR_S,
+    VPSS_CROP_INFO_S,
+    VPSS_EXT_CHN_ATTR_S,
+    VPSS_GRP_ATTR_S,
+    VPSS_GRP_NRX_PARAM_S,
+    VPSS_GRP_SHARPEN_ATTR_S,
+    VPSS_GRP_SHARPEN_AUTO_ATTR_S,
+    VPSS_GRP_SHARPEN_MANUAL_ATTR_S,
+    VPSS_LDC_ATTR_S,
+    VPSS_LOW_DELAY_INFO_S,
+    VPSS_MOD_PARAM_S,
+    VPSS_NR_ATTR_S,
+    VPSS_NRX_PARAM_AUTO_V1_S,
+    VPSS_NRX_PARAM_MANUAL_V1_S,
+    VPSS_NRX_PARAM_V1_S,
+    VPSS_NRX_V1_S,
+    VPSS_ROTATION_EX_ATTR_S,
+);
+
+#[cfg(all(
+    feature = "mpi-vpss",
+    any(
+        feature = "hi3516cv500",
+        feature = "hi3516dv300",
+        feature = "hi3556v200",
+        feature = "hi3559v200"
+    )
+))]
+impl_as_bundle!(
+    VPSS_NRX_PARAM_AUTO_V2_S,
+    VPSS_NRX_PARAM_MANUAL_V2_S,
+    VPSS_NRX_PARAM_V2_S,
+    VPSS_NRX_V2_S,
+);
+
+#[cfg(all(feature = "mpi-vpss", any(feature = "hi3516ev200")))]
+impl_as_bundle_many!(
+    VPSS_CHN_BUF_WRAP_S,
+    VPSS_LDCV3_ATTR_S,
+    VPSS_NRX_PARAM_AUTO_V3_S,
+    VPSS_NRX_PARAM_MANUAL_V3_S,
+    VPSS_NRX_PARAM_V3_S,
+    VPSS_NRX_V3_S,
+);
 
 cfg_if::cfg_if! {
     if #[cfg(feature = "hi3531v100")] {

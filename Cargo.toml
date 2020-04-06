@@ -15,8 +15,9 @@ categories = ["embedded", "external-ffi-bindings"]
 license = "MIT"
 
 [dependencies]
-rust-bitfield = "0.1.1"
 cfg-if = "0.1"
+pavo-traits = "0.1.1"
+rust-bitfield = "0.1.1"
 
 [build-dependencies]
 bindgen = "0.53.2"
@@ -45,7 +46,11 @@ hi3518ev300 = []
 hi3519av100 = []
 hi3531v100 = [ "static-link" ]
 hi3559av100 = [
+    "mpi-avs",
     "mpi-dsp",
+    "mpi-gdc",
+    "mpi-isp",
+    "mpi-ive",
     "mpi-nnie",
 ]
 mpi-ae = []
@@ -57,7 +62,7 @@ mpi-dsp = []
 mpi-gdc = []
 mpi-hdmi = []
 mpi-hdr = []
-mpi-isp = []
+mpi-isp = [ "mpi-ae", "mpi-video" ]
 mpi-ive = []
 mpi-nnie = []
 mpi-pciv = []
@@ -66,12 +71,13 @@ mpi-region = []
 mpi-snap = []
 mpi-sys = []
 mpi-vb = []
-mpi-vdec = []
-mpi-venc = []
+mpi-vdec = [ "mpi-video" ]
+mpi-venc = [ "mpi-video" ]
 mpi-vgs = []
-mpi-vi = []
-mpi-vo = []
-mpi-vpss = []
+mpi-vi = [ "mpi-video" ]
+mpi-video = []
+mpi-vo = [ "mpi-video" ]
+mpi-vpss = [ "mpi-video" ]
 
 [profile.release]
 codegen-units = 1
