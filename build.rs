@@ -281,7 +281,9 @@ fn main() -> Result<(), DynError> {
     }
 
     if cfg!(feature = "mpi-gdc") {
+        writeln!(wrapper, "#include <fisheye_calibrate.h>")?;
         writeln!(wrapper, "#include <mpi_gdc.h>")?;
+        linklib!("hifisheyecalibrate");
     }
 
     if cfg!(feature = "mpi-isp") {
