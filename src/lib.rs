@@ -1003,7 +1003,7 @@ impl Eq for VENC_STREAM_INFO_S {}
 impl_as_bundle_many!(
     VGS_ADD_COVER_S,
     VGS_OSD_REVERT_S,
-    VGS_MODULE_PARAMS_S
+    // VGS_MODULE_PARAMS_S,
     VGS_QUADRANGLE_COVER_S,
     VGS_TASK_ATTR_S,
 );
