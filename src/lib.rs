@@ -603,6 +603,10 @@ impl PartialEq for VDEC_PRTCL_PARAM_S {
     }
 }
 
+// Fix incomplete Eq trait for VDEC_PRTCL_PARAM_S
+#[cfg(feature = "mpi-vdec")]
+impl Eq for VDEC_PRTCL_PARAM_S {}
+
 #[cfg(feature = "mpi-venc")]
 impl_as_bundle_many!(
     VENC_ATTR_H264_S,
