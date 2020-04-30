@@ -259,6 +259,20 @@ impl_as_bundle_many!(
     SVP_NNIE_SEG_S,
 );
 
+// Fix incomplete Debug trait for FISHEYE_CONFIG_S
+#[cfg(feature = "mpi-gdc")]
+impl std::fmt::Debug for FISHEYE_CONFIG_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("FISHEYE_CONFIG_S")
+            .field("au16LMFCoef", &self.au16LMFCoef.to_vec())
+            .finish()
+    }
+}
+
+// Fix incomplete Eq trait for FISHEYE_CONFIG_S
+#[cfg(feature = "mpi-gdc")]
+impl Eq for FISHEYE_CONFIG_S {}
+
 // Fix incomplete Debug trait for SVP_BLOB_S
 #[cfg(feature = "mpi-nnie")]
 impl std::fmt::Debug for SVP_BLOB_S {
