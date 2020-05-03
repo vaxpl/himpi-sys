@@ -420,17 +420,209 @@ impl_as_bundle_many!(
     COVER_CHN_ATTR_S,
     COVEREX_CHN_ATTR_S,
     MOSAIC_CHN_ATTR_S,
-    RGN_ATTR_S,
-    RGN_CANVAS_INFO_S,
-    RGN_CHN_ATTR_S,
-    RGN_QUADRANGLE_S,
     OVERLAY_QP_INFO_S,
     OVERLAY_ATTR_S,
     OVERLAY_CHN_ATTR_S,
     OVERLAY_INVERT_COLOR_S,
     OVERLAYEX_ATTR_S,
     OVERLAYEX_CHN_ATTR_S,
+    RGN_ATTR_S,
+    RGN_CANVAS_INFO_S,
+    RGN_CHN_ATTR_S,
+    RGN_QUADRANGLE_S,
 );
+
+// Fix incomplete Debug trait for COVER_CHN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl std::fmt::Debug for COVER_CHN_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut ds = f.debug_struct("COVER_CHN_ATTR_S");
+        ds.field("enCoverType", &self.enCoverType);
+        unsafe {
+            use RGN_AREA_TYPE_E::*;
+            match self.enCoverType {
+                AREA_RECT => {
+                    ds.field("stRect", &self.un1.stRect);
+                }
+                AREA_QUAD_RANGLE => {
+                    ds.field("stQuadRangle", &self.un1.stQuadRangle);
+                }
+                _ => unreachable!(),
+            }
+        }
+        ds.field("u32Color", &self.u32Color)
+            .field("u32Layer", &self.u32Layer)
+            .field("enCoordinate", &self.enCoordinate)
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for COVER_CHN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl PartialEq for COVER_CHN_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            let r: bool = self.enCoverType == other.enCoverType
+                && self.u32Color == other.u32Color
+                && self.u32Layer == other.u32Layer
+                && self.enCoordinate == other.enCoordinate;
+            use RGN_AREA_TYPE_E::*;
+            match self.enCoverType {
+                AREA_RECT => r && (self.un1.stRect == other.un1.stRect),
+                AREA_QUAD_RANGLE => r && (self.un1.stQuadRangle == other.un1.stQuadRangle),
+                _ => unreachable!(),
+            }
+        }
+    }
+}
+
+// Fix incomplete Eq trait for COVER_CHN_ATTR_S.
+#[cfg(feature = "mpi-region")]
+impl std::cmp::Eq for COVER_CHN_ATTR_S {}
+
+// Fix incomplete Debug trait for COVEREX_CHN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl std::fmt::Debug for COVEREX_CHN_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut ds = f.debug_struct("COVEREX_CHN_ATTR_S");
+        ds.field("enCoverType", &self.enCoverType);
+        unsafe {
+            use RGN_AREA_TYPE_E::*;
+            match self.enCoverType {
+                AREA_RECT => {
+                    ds.field("stRect", &self.un1.stRect);
+                }
+                AREA_QUAD_RANGLE => {
+                    ds.field("stQuadRangle", &self.un1.stQuadRangle);
+                }
+                _ => unreachable!(),
+            }
+        }
+        ds.field("u32Color", &self.u32Color)
+            .field("u32Layer", &self.u32Layer)
+            .finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for COVEREX_CHN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl PartialEq for COVEREX_CHN_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            let r: bool = self.enCoverType == other.enCoverType
+                && self.u32Color == other.u32Color
+                && self.u32Layer == other.u32Layer;
+            use RGN_AREA_TYPE_E::*;
+            match self.enCoverType {
+                AREA_RECT => r && (self.un1.stRect == other.un1.stRect),
+                AREA_QUAD_RANGLE => r && (self.un1.stQuadRangle == other.un1.stQuadRangle),
+                _ => unreachable!(),
+            }
+        }
+    }
+}
+
+// Fix incomplete Eq trait for COVEREX_CHN_ATTR_S.
+#[cfg(feature = "mpi-region")]
+impl std::cmp::Eq for COVEREX_CHN_ATTR_S {}
+
+// Fix incomplete Debug trait for RGN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl std::fmt::Debug for RGN_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut ds = f.debug_struct("RGN_ATTR_S");
+        ds.field("enType", &self.enType);
+        unsafe {
+            use RGN_TYPE_E::*;
+            match self.enType {
+                OVERLAY_RGN => {
+                    ds.field("stOverlay", &self.unAttr.stOverlay);
+                }
+                OVERLAYEX_RGN => {
+                    ds.field("stOverlayEx", &self.unAttr.stOverlayEx);
+                }
+                _ => unreachable!(),
+            }
+        }
+        ds.finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for RGN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl PartialEq for RGN_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            let r: bool = self.enType == other.enType;
+            use RGN_TYPE_E::*;
+            match self.enType {
+                OVERLAY_RGN => r && (self.unAttr.stOverlay == other.unAttr.stOverlay),
+                OVERLAYEX_RGN => r && (self.unAttr.stOverlayEx == other.unAttr.stOverlayEx),
+                _ => unreachable!(),
+            }
+        }
+    }
+}
+
+// Fix incomplete Eq trait for RGN_ATTR_S.
+#[cfg(feature = "mpi-region")]
+impl std::cmp::Eq for RGN_ATTR_S {}
+
+// Fix incomplete Debug trait for RGN_CHN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl std::fmt::Debug for RGN_CHN_ATTR_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut ds = f.debug_struct("RGN_CHN_ATTR_S");
+        ds.field("bShow", &self.bShow).field("enType", &self.enType);
+        unsafe {
+            use RGN_TYPE_E::*;
+            match self.enType {
+                OVERLAY_RGN => {
+                    ds.field("stOverlayChn", &self.unChnAttr.stOverlayChn);
+                }
+                COVER_RGN => {
+                    ds.field("stCoverChn", &self.unChnAttr.stCoverChn);
+                }
+                COVEREX_RGN => {
+                    ds.field("stCoverExChn", &self.unChnAttr.stCoverExChn);
+                }
+                OVERLAYEX_RGN => {
+                    ds.field("stOverlayExChn", &self.unChnAttr.stOverlayExChn);
+                }
+                MOSAIC_RGN => {
+                    ds.field("stMosaicChn", &self.unChnAttr.stMosaicChn);
+                }
+                _ => unreachable!(),
+            }
+        }
+        ds.finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for RGN_CHN_ATTR_S
+#[cfg(feature = "mpi-region")]
+impl PartialEq for RGN_CHN_ATTR_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            let r: bool = self.bShow == other.bShow && self.enType == other.enType;
+            use RGN_TYPE_E::*;
+            match self.enType {
+                OVERLAY_RGN => r && (self.unChnAttr.stOverlayChn == other.unChnAttr.stOverlayChn),
+                COVER_RGN => r && (self.unChnAttr.stCoverChn == other.unChnAttr.stCoverChn),
+                COVEREX_RGN => r && (self.unChnAttr.stCoverExChn == other.unChnAttr.stCoverExChn),
+                OVERLAYEX_RGN => {
+                    r && (self.unChnAttr.stOverlayExChn == other.unChnAttr.stOverlayExChn)
+                }
+                MOSAIC_RGN => r && (self.unChnAttr.stMosaicChn == other.unChnAttr.stMosaicChn),
+                _ => unreachable!(),
+            }
+        }
+    }
+}
+
+// Fix incomplete Eq trait for RGN_CHN_ATTR_S.
+#[cfg(feature = "mpi-region")]
+impl std::cmp::Eq for RGN_CHN_ATTR_S {}
 
 #[cfg(feature = "mpi-sys")]
 impl_as_bundle_many!(
