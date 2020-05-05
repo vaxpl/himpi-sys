@@ -381,6 +381,7 @@ fn main() -> Result<(), DynError> {
         .clang_arg(format!("-I{}/include", env::var("MPP_DIR").unwrap()))
         .clang_arg(format!("-I{}", env::var("SYS_INCLUDE").unwrap()))
         .parse_callbacks(Box::new(MyParseCallbacks::default()))
+        .generate_comments(false)
         .generate()
         .expect("Unable to generate bindings");
 
