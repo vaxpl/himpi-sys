@@ -8,6 +8,7 @@
 #![allow(improper_ctypes)]
 #![allow(clippy::missing_safety_doc)]
 #![allow(clippy::op_ref)]
+#![allow(clippy::redundant_static_lifetimes)]
 #![allow(clippy::should_implement_trait)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::transmute_ptr_to_ptr)]
