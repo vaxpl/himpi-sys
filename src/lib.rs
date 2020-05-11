@@ -72,24 +72,37 @@ impl_as_bundle_many!(
     HI_CEC_RAWDATA_S,
     HI_HDMI_ATTR_S,
     HI_HDMI_AUD_INFOFRAME_VER1_S,
-    HI_HDMI_AUDIO_INFO_S,
+    // HI_HDMI_AUDIO_INFO_S,
     HI_HDMI_AVI_INFOFRAME_VER2_S,
-    HI_HDMI_CALLBACK_FUNC_S,
+    // HI_HDMI_CALLBACK_FUNC_S,
     HI_HDMI_CEC_CMD_S,
     HI_HDMI_CEC_STATUS_S,
-    HI_HDMI_CECCALLBACK_FUNC_S,
-    HI_HDMI_DET_TIMING_S,
+    // HI_HDMI_CECCALLBACK_FUNC_S,
+    // HI_HDMI_DET_TIMING_S,
     HI_HDMI_EDID_S,
-    HI_HDMI_EOTF_S,
-    HI_HDMI_HDR_CAP_S,
-    HI_HDMI_HDR_METADATA_TYPE_S,
+    // HI_HDMI_EOTF_S,
+    // HI_HDMI_HDR_CAP_S,
+    // HI_HDMI_HDR_METADATA_TYPE_S,
     HI_HDMI_INFOFRAME_S,
-    HI_HDMI_MOD_PARAM_S,
+    // HI_HDMI_MOD_PARAM_S,
     HI_HDMI_MPEGSOURCE_INFOFRAME_S,
     HI_HDMI_SINK_CAPABILITY_S,
     HI_HDMI_SPD_INFOFRAME_S,
-    HI_HDMI_TIMING_INFO_S,
+    // HI_HDMI_TIMING_INFO_S,
     HI_HDMI_VENDORSPEC_INFOFRAME_S
+);
+
+#[cfg(all(feature = "mpi-hdmi", not(feature = "hi3531v100")))]
+impl_as_bundle_many!(
+    HI_HDMI_AUDIO_INFO_S,
+    HI_HDMI_CALLBACK_FUNC_S,
+    HI_HDMI_CECCALLBACK_FUNC_S,
+    HI_HDMI_DET_TIMING_S,
+    HI_HDMI_EOTF_S,
+    HI_HDMI_HDR_CAP_S,
+    HI_HDMI_HDR_METADATA_TYPE_S,
+    HI_HDMI_MOD_PARAM_S,
+    HI_HDMI_TIMING_INFO_S,
 );
 
 #[cfg(feature = "mpi-isp")]
@@ -179,6 +192,54 @@ impl_as_bundle_many!(
 
 #[cfg(feature = "mpi-ive")]
 impl_as_bundle_many!(
+    // IVE_16BIT_TO_8BIT_CTRL_S,
+    // IVE_ADD_CTRL_S,
+    // IVE_CANDI_BG_PIX_S,
+    // IVE_CANNY_HYS_EDGE_CTRL_S,
+    // IVE_CANNY_STACK_SIZE_S,
+    // IVE_CCBLOB_S,
+    // IVE_CCL_CTRL_S,
+    IVE_CSC_CTRL_S,
+    // IVE_DATA_S,
+    IVE_DILATE_CTRL_S,
+    // IVE_DMA_CTRL_S,
+    // IVE_EQUALIZE_HIST_CTRL_S,
+    // IVE_EQUALIZE_HIST_CTRL_MEM_S,
+    IVE_ERODE_CTRL_S,
+    IVE_FILTER_AND_CSC_CTRL_S,
+    IVE_FILTER_CTRL_S,
+    // IVE_GMM_CTRL_S,
+    // IVE_GMM2_CTRL_S,
+    // IVE_GRAD_FG_CTRL_S,
+    // IVE_INTEG_CTRL_S,
+    // IVE_IMAGE_S,
+    // IVE_LBP_CTRL_S,
+    // IVE_MAG_AND_ANG_CTRL_S,
+    // IVE_MAP_CTRL_S,
+    // IVE_MAP_S16BIT_LUT_MEM_S,
+    // IVE_MAP_U8BIT_LUT_MEM_S,
+    // IVE_MAP_U16BIT_LUT_MEM_S,
+    // IVE_MEM_INFO_S,
+    // IVE_NCC_DST_MEM_S,
+    // IVE_NORM_GRAD_CTRL_S,
+    // IVE_ORD_STAT_FILTER_CTRL_S,
+    // IVE_REGION_S,
+    // IVE_RESIZE_CTRL_S,
+    // IVE_SAD_CTRL_S,
+    IVE_SOBEL_CTRL_S,
+    // IVE_ST_CANDI_CORNER_CTRL_S,
+    // IVE_ST_CORNER_CTRL_S,
+    // IVE_ST_CORNER_INFO_S,
+    // IVE_ST_MAX_EIG_S,
+    // IVE_SUB_CTRL_S,
+    IVE_THRESH_CTRL_S,
+    // IVE_THRESH_S16_CTRL_S,
+    // IVE_THRESH_U16_CTRL_S,
+    // IVE_WORK_BG_PIX_S,
+);
+
+#[cfg(all(feature = "mpi-ive", not(feature = "hi3531v100")))]
+impl_as_bundle_many!(
     IVE_16BIT_TO_8BIT_CTRL_S,
     IVE_ADD_CTRL_S,
     IVE_CANDI_BG_PIX_S,
@@ -186,15 +247,10 @@ impl_as_bundle_many!(
     IVE_CANNY_STACK_SIZE_S,
     IVE_CCBLOB_S,
     IVE_CCL_CTRL_S,
-    IVE_CSC_CTRL_S,
     IVE_DATA_S,
-    IVE_DILATE_CTRL_S,
     IVE_DMA_CTRL_S,
     IVE_EQUALIZE_HIST_CTRL_S,
     IVE_EQUALIZE_HIST_CTRL_MEM_S,
-    IVE_ERODE_CTRL_S,
-    IVE_FILTER_AND_CSC_CTRL_S,
-    IVE_FILTER_CTRL_S,
     IVE_GMM_CTRL_S,
     IVE_GMM2_CTRL_S,
     IVE_GRAD_FG_CTRL_S,
@@ -213,13 +269,11 @@ impl_as_bundle_many!(
     IVE_REGION_S,
     IVE_RESIZE_CTRL_S,
     IVE_SAD_CTRL_S,
-    IVE_SOBEL_CTRL_S,
     IVE_ST_CANDI_CORNER_CTRL_S,
     IVE_ST_CORNER_CTRL_S,
     IVE_ST_CORNER_INFO_S,
     IVE_ST_MAX_EIG_S,
     IVE_SUB_CTRL_S,
-    IVE_THRESH_CTRL_S,
     IVE_THRESH_S16_CTRL_S,
     IVE_THRESH_U16_CTRL_S,
     IVE_WORK_BG_PIX_S,
@@ -374,6 +428,7 @@ impl PartialEq for SVP_NNIE_MODEL_S {
 }
 
 // Fix incomplete Eq trait for SVP_NNIE_MODEL_S
+#[cfg(feature = "mpi-nnie")]
 impl Eq for SVP_NNIE_MODEL_S {}
 
 // Fix incomplete Debug trait for SVP_NNIE_SEG_S
@@ -420,7 +475,7 @@ impl Eq for SVP_NNIE_SEG_S {}
 impl_as_bundle_many!(
     COVER_CHN_ATTR_S,
     COVEREX_CHN_ATTR_S,
-    MOSAIC_CHN_ATTR_S,
+    // MOSAIC_CHN_ATTR_S,
     OVERLAY_QP_INFO_S,
     OVERLAY_ATTR_S,
     OVERLAY_CHN_ATTR_S,
@@ -428,14 +483,27 @@ impl_as_bundle_many!(
     OVERLAYEX_ATTR_S,
     OVERLAYEX_CHN_ATTR_S,
     RGN_ATTR_S,
-    RGN_CANVAS_INFO_S,
+    // RGN_CANVAS_INFO_S,
     RGN_CHN_ATTR_S,
-    RGN_QUADRANGLE_S,
+    // RGN_QUADRANGLE_S,
 );
+
+#[cfg(all(feature = "mpi-region", not(feature = "hi3531v100")))]
+impl_as_bundle_many!(MOSAIC_CHN_ATTR_S, RGN_CANVAS_INFO_S, RGN_QUADRANGLE_S,);
 
 // Fix incomplete Debug trait for COVER_CHN_ATTR_S
 #[cfg(feature = "mpi-region")]
 impl std::fmt::Debug for COVER_CHN_ATTR_S {
+    #[cfg(feature = "hi3531v100")]
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("COVER_CHN_ATTR_S")
+            .field("stRect", &self.stRect)
+            .field("u32Color", &self.u32Color)
+            .field("u32Layer", &self.u32Layer)
+            .finish()
+    }
+
+    #[cfg(not(feature = "hi3531v100"))]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut ds = f.debug_struct("COVER_CHN_ATTR_S");
         ds.field("enCoverType", &self.enCoverType);
@@ -461,6 +529,14 @@ impl std::fmt::Debug for COVER_CHN_ATTR_S {
 // Fix incomplete PartialEq trait for COVER_CHN_ATTR_S
 #[cfg(feature = "mpi-region")]
 impl PartialEq for COVER_CHN_ATTR_S {
+    #[cfg(feature = "hi3531v100")]
+    fn eq(&self, other: &Self) -> bool {
+        self.stRect == other.stRect
+            && self.u32Color == other.u32Color
+            && self.u32Layer == other.u32Layer
+    }
+
+    #[cfg(not(feature = "hi3531v100"))]
     fn eq(&self, other: &Self) -> bool {
         unsafe {
             let r: bool = self.enCoverType == other.enCoverType
@@ -484,6 +560,16 @@ impl std::cmp::Eq for COVER_CHN_ATTR_S {}
 // Fix incomplete Debug trait for COVEREX_CHN_ATTR_S
 #[cfg(feature = "mpi-region")]
 impl std::fmt::Debug for COVEREX_CHN_ATTR_S {
+    #[cfg(feature = "hi3531v100")]
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("COVEREX_CHN_ATTR_S")
+            .field("stRect", &self.stRect)
+            .field("u32Color", &self.u32Color)
+            .field("u32Layer", &self.u32Layer)
+            .finish()
+    }
+
+    #[cfg(not(feature = "hi3531v100"))]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut ds = f.debug_struct("COVEREX_CHN_ATTR_S");
         ds.field("enCoverType", &self.enCoverType);
@@ -508,6 +594,14 @@ impl std::fmt::Debug for COVEREX_CHN_ATTR_S {
 // Fix incomplete PartialEq trait for COVEREX_CHN_ATTR_S
 #[cfg(feature = "mpi-region")]
 impl PartialEq for COVEREX_CHN_ATTR_S {
+    #[cfg(feature = "hi3531v100")]
+    fn eq(&self, other: &Self) -> bool {
+        self.stRect == other.stRect
+            && self.u32Color == other.u32Color
+            && self.u32Layer == other.u32Layer
+    }
+
+    #[cfg(not(feature = "hi3531v100"))]
     fn eq(&self, other: &Self) -> bool {
         unsafe {
             let r: bool = self.enCoverType == other.enCoverType
@@ -627,11 +721,24 @@ impl std::cmp::Eq for RGN_CHN_ATTR_S {}
 
 #[cfg(feature = "mpi-sys")]
 impl_as_bundle_many!(
+    // GPS_INFO_S,
+    // MPP_BIND_DEST_S,
+    MPP_CHN_S,
+    // MPP_SYS_CONFIG_S,
+    MPP_VERSION_S,
+    // SCALE_COEFF_LEVEL_S,
+    // SYS_VIRMEM_INFO_S,
+    // VI_VPSS_MODE_S,
+);
+
+#[cfg(all(feature = "mpi-sys", feature = "hi3531v100"))]
+impl_as_bundle_many!(MPP_SYS_CONF_S,);
+
+#[cfg(all(feature = "mpi-sys", not(feature = "hi3531v100")))]
+impl_as_bundle_many!(
     GPS_INFO_S,
     MPP_BIND_DEST_S,
-    MPP_CHN_S,
     MPP_SYS_CONFIG_S,
-    MPP_VERSION_S,
     SCALE_COEFF_LEVEL_S,
     SYS_VIRMEM_INFO_S,
     VI_VPSS_MODE_S,
@@ -672,24 +779,42 @@ impl std::fmt::Debug for MPP_VERSION_S {
 impl std::cmp::Eq for MPP_VERSION_S {}
 
 // Impl AsMut/AsRef/AsPtr/AsPtrMut of VB_CAL_CONFIG_S
-#[cfg(feature = "mpi-vb")]
+#[cfg(all(feature = "mpi-vb", feature = "hi3531v100"))]
+impl_as_bundle_many!(VB_CONF_S, VB_CPOOL_S,);
+
+#[cfg(all(feature = "mpi-vb", not(feature = "hi3531v100")))]
 impl_as_bundle_many!(VB_CAL_CONFIG_S, VB_CONFIG_S, VB_POOL_CONFIG_S,);
 
 #[cfg(feature = "mpi-vdec")]
 impl_as_bundle_many!(
-    H264_PRTCL_PARAM_S,
-    H265_PRTCL_PARAM_S,
+    // H264_PRTCL_PARAM_S,
+    // H265_PRTCL_PARAM_S,
     VDEC_ATTR_VIDEO_S,
     VDEC_CHN_ATTR_S,
     VDEC_CHN_PARAM_S,
+    // VDEC_CHN_POOL_S,
+    // VDEC_CHN_STATUS_S,
+    // VDEC_MOD_PARAM_S,
+    // VDEC_PARAM_VIDEO_S,
+    // VDEC_PARAM_PICTURE_S,
+    VDEC_PRTCL_PARAM_S,
+    VDEC_STREAM_S,
+    VDEC_USERDATA_S,
+    // VDEC_VIDEO_MOD_PARAM_S,
+);
+
+#[cfg(all(feature = "mpi-vdec", feature = "hi3531v100"))]
+impl_as_bundle_many!(VDEC_CHN_STAT_S,);
+
+#[cfg(all(feature = "mpi-vdec", not(feature = "hi3531v100")))]
+impl_as_bundle_many!(
+    H264_PRTCL_PARAM_S,
+    H265_PRTCL_PARAM_S,
     VDEC_CHN_POOL_S,
     VDEC_CHN_STATUS_S,
     VDEC_MOD_PARAM_S,
     VDEC_PARAM_VIDEO_S,
     VDEC_PARAM_PICTURE_S,
-    VDEC_PRTCL_PARAM_S,
-    VDEC_STREAM_S,
-    VDEC_USERDATA_S,
     VDEC_VIDEO_MOD_PARAM_S,
 );
 
@@ -736,6 +861,18 @@ impl Eq for VDEC_CHN_ATTR_S {}
 // Fix incomplete Debug trait for VDEC_CHN_PARAM_S
 #[cfg(feature = "mpi-vdec")]
 impl std::fmt::Debug for VDEC_CHN_PARAM_S {
+    #[cfg(feature = "hi3531v100")]
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("VDEC_CHN_PARAM_S")
+            .field("s32ChanErrThr", &self.s32ChanErrThr)
+            .field("s32ChanStrmOFThr", &self.s32ChanStrmOFThr)
+            .field("s32DecMode", &self.s32DecMode)
+            .field("s32DecOrderOutput", &self.s32DecOrderOutput)
+            .field("s32DnrTfEnable", &self.s32DnrTfEnable)
+            .field("s32DnrDispOutEnable", &self.s32DnrDispOutEnable)
+    }
+
+    #[cfg(not(feature = "hi3531v100"))]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fds = f.debug_struct("VDEC_CHN_PARAM_S");
         fds.field("enType", &self.enType)
@@ -757,6 +894,17 @@ impl std::fmt::Debug for VDEC_CHN_PARAM_S {
 // Fix incomplete PartialEq trait for VDEC_CHN_PARAM_S
 #[cfg(feature = "mpi-vdec")]
 impl PartialEq for VDEC_CHN_PARAM_S {
+    #[cfg(feature = "hi3531v100")]
+    fn eq(&self, other: &Self) -> bool {
+        self.s32ChanErrThr == other.s32ChanErrThr
+            && self.s32ChanStrmOFThr == other.s32ChanStrmOFThr
+            && self.s32DecMode == other.s32DecMode
+            && self.s32DecOrderOutput == other.s32DecOrderOutput
+            && self.s32DnrTfEnable == other.s32DnrTfEnable
+            && self.s32DnrDispOutEnable == other.s32DnrDispOutEnable
+    }
+
+    #[cfg(not(feature = "hi3531v100"))]
     fn eq(&self, other: &Self) -> bool {
         let b = self.enType == other.enType && self.u32DisplayFrameNum == other.u32DisplayFrameNum;
         use PAYLOAD_TYPE_E::*;
@@ -817,26 +965,26 @@ impl Eq for VDEC_PRTCL_PARAM_S {}
 #[cfg(feature = "mpi-venc")]
 impl_as_bundle_many!(
     VENC_ATTR_H264_S,
-    VENC_ATTR_H265_S,
+    // VENC_ATTR_H265_S,
     VENC_ATTR_JPEG_S,
     VENC_ATTR_MJPEG_S,
-    VENC_ATTR_PRORES_S,
+    // VENC_ATTR_PRORES_S,
     VENC_ATTR_S,
     VENC_CHN_ATTR_S,
     VENC_CHN_STATUS_S,
-    VENC_GOP_ATTR_S,
-    VENC_GOP_ADVSMARTP_S,
-    VENC_GOP_BIPREDB_S,
-    VENC_GOP_DUALP_S,
-    VENC_GOP_NORMALP_S,
-    VENC_GOP_SMARTP_S,
+    // VENC_GOP_ATTR_S,
+    // VENC_GOP_ADVSMARTP_S,
+    // VENC_GOP_BIPREDB_S,
+    // VENC_GOP_DUALP_S,
+    // VENC_GOP_NORMALP_S,
+    // VENC_GOP_SMARTP_S,
     VENC_H264_DBLK_S,
     VENC_H264_ENTROPY_S,
     VENC_H264_INTRA_PRED_S,
     VENC_H264_SLICE_SPLIT_S,
     VENC_H264_TRANS_S,
     VENC_H264_VUI_S,
-    VENC_H265_VUI_S,
+    // VENC_H265_VUI_S,
     VENC_JPEG_PARAM_S,
     VENC_MJPEG_PARAM_S,
     VENC_MPF_CFG_S,
@@ -865,6 +1013,19 @@ impl_as_bundle_many!(
     VENC_VUI_H264_TIME_INFO_S,
     VENC_VUI_H265_TIME_INFO_S,
     VENC_VUI_VIDEO_SIGNAL_S,
+);
+
+#[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
+impl_as_bundle_many!(
+    VENC_ATTR_H265_S,
+    VENC_ATTR_PRORES_S,
+    VENC_GOP_ATTR_S,
+    VENC_GOP_ADVSMARTP_S,
+    VENC_GOP_BIPREDB_S,
+    VENC_GOP_DUALP_S,
+    VENC_GOP_NORMALP_S,
+    VENC_GOP_SMARTP_S,
+    VENC_H265_VUI_S,
 );
 
 // Fix incomplete Debug trait for VENC_ATTR_S
@@ -981,7 +1142,7 @@ impl PartialEq for VENC_DATA_TYPE_U {
 impl Eq for VENC_DATA_TYPE_U {}
 
 // Fix incomplete Debug trait for VENC_GOP_ATTR_S
-#[cfg(feature = "mpi-venc")]
+#[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
 impl std::fmt::Debug for VENC_GOP_ATTR_S {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fds = f.debug_struct("VENC_GOP_ATTR_S");
@@ -1002,7 +1163,7 @@ impl std::fmt::Debug for VENC_GOP_ATTR_S {
 }
 
 // Fix incomplete PartialEq trait for VENC_GOP_ATTR_S
-#[cfg(feature = "mpi-venc")]
+#[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
 impl PartialEq for VENC_GOP_ATTR_S {
     fn eq(&self, other: &Self) -> bool {
         if self.enGopMode != other.enGopMode {
@@ -1024,7 +1185,7 @@ impl PartialEq for VENC_GOP_ATTR_S {
 }
 
 // Fix incomplete Eq trait for VENC_GOP_ATTR_S
-#[cfg(feature = "mpi-venc")]
+#[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
 impl Eq for VENC_GOP_ATTR_S {}
 
 // Fix incomplete Debug trait for VENC_PACK_INFO_S
