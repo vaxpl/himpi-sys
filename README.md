@@ -86,6 +86,22 @@ cargo b
 > Make sure the `hi3559av100` feature is enabled in the Cargo.toml,
 > The `hi3559av100` specified the target board, you can change to others,
 > like: `hi3531v100`
+> More features see the Cargo.toml.
+
+To build with `arm-hisiv100-linux-uclibcgnueabi`:
+
+```sh
+# the nightly toolchain and rust-src must be installed.
+rustup override set nightly
+rustup component add rust-src
+# the xargo command must be installed.
+cargo install xargo
+# if the above already, that should be work now.
+RUST_TARGET_PATH=$(pwd) xargo [b|c|r|t] ...
+```
+
+> if RUST_TARGET_PATH not set, the xargo will raise
+> "Error loading target specification..."
 
 **Patch bindgen**:
 
@@ -96,7 +112,7 @@ you must patch the crates.io to replace the bindgen with the patched version.
 # Cargo.toml
 
 [patch.crates-io]
-bindgen = { git = "https://github.com/varphone/rust-bindgen.git", rev = "v0.52.0-sp1" }
+bindgen = { git = "https://github.com/varphone/rust-bindgen.git", rev = "v0.53.2-sp1" }
 ```
 
 Examples
