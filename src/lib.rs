@@ -1376,6 +1376,42 @@ impl_as_bundle_many!(
     VGS_TASK_ATTR_S,
 );
 
+// Fix incomplete Debug trait for VGS_ADD_COVER_S
+#[cfg(feature = "mpi-vgs")]
+impl std::fmt::Debug for VGS_ADD_COVER_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut ds = f.debug_struct("VGS_ADD_COVER_S");
+        ds.field("enCoverType", &self.enCoverType);
+        match self.enCoverType {
+            VGS_COVER_TYPE_E::COVER_RECT => unsafe {
+                ds.field("stDstRect", &self.un1.stDstRect);
+            },
+            VGS_COVER_TYPE_E::COVER_QUAD_RANGLE => unsafe {
+                ds.field("stQuadRangle", &self.un1.stQuadRangle);
+            },
+            _ => {}
+        }
+        ds.field("u32Color", &self.u32Color).finish()
+    }
+}
+
+// Fix incomplete PartialEq trait for VGS_ADD_COVER_S
+#[cfg(feature = "mpi-vgs")]
+impl PartialEq for VGS_ADD_COVER_S {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            self.enCoverType == other.enCoverType
+                && self.un1.stDstRect == other.un1.stDstRect
+                && self.un1.stQuadRangle == other.un1.stQuadRangle
+                && self.u32Color == other.u32Color
+        }
+    }
+}
+
+// Fix incomplete Eq trait for VGS_ADD_COVER_S
+#[cfg(feature = "mpi-vgs")]
+impl Eq for VGS_ADD_COVER_S {}
+
 #[cfg(feature = "mpi-vi")]
 impl_as_bundle_many!(
     BNR_DUMP_ATTR_S,
