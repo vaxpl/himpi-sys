@@ -29,7 +29,19 @@ bindgen = { git = "https://github.com/varphone/rust-bindgen.git", rev = "v0.54.1
 [features]
 default = []
 static-link = []
-hi3516ev200 = []
+hi3516ev200 = [
+    "static-link",
+    "mpi-audio",
+    "mpi-isp",
+    "mpi-ive",
+    "mpi-region",
+    "mpi-sys",
+    "mpi-vb",
+    "mpi-venc",
+    "mpi-vi",
+    "mpi-vo",
+    "mpi-vpss"
+]
 hi3516ev300 = []
 hi3518ev200 = []
 hi3518ev300 = []

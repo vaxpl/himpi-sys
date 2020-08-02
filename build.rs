@@ -368,7 +368,6 @@ fn main() -> Result<(), DynError> {
         .derive_partialeq(true)
         .derive_eq(true)
         .impl_partialeq(true)
-        .blacklist_type("^VPSS_NRX_V1_S|^tV56a.*$")
         .whitelist_function("^HI_.*")
         .whitelist_type("^HI_.*$")
         .whitelist_type("*._[ES]$")
