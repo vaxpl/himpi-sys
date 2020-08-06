@@ -1,4 +1,3 @@
-use bindgen;
 use regex::Regex;
 use std::env;
 use std::fs::File;
@@ -43,6 +42,7 @@ struct MyParseCallbacks;
 
 impl bindgen::callbacks::ParseCallbacks for MyParseCallbacks {
     /// Allows to rename an item, replacing `original_item_name`.
+    #[allow(clippy::single_match)]
     fn item_name(&self, original_item_name: &str) -> Option<String> {
         match original_item_name {
             "hiVB_CONF_S_hiVB_CPOOL_S" => {
@@ -51,11 +51,11 @@ impl bindgen::callbacks::ParseCallbacks for MyParseCallbacks {
             _ => {}
         }
         let re = Regex::new(r"^(hi)([^a-z]+)$").unwrap();
-        for cap in re.captures_iter(original_item_name) {
-            return Some(format!("{}", &cap[2]));
+        if let Some(cap) = re.captures_iter(original_item_name).next() {
+            return Some(cap[2].to_string());
         }
         let re = Regex::new(r"^(hi)([^a-z]+)__bindgen_ty_(\d)$").unwrap();
-        for cap in re.captures_iter(original_item_name) {
+        if let Some(cap) = re.captures_iter(original_item_name).next() {
             return Some(format!("{}_U{}", &cap[2], &cap[3]));
         }
         None
@@ -97,104 +97,89 @@ fn detect_mpp_path(mpp_dir: &str) -> Result<PathBuf, DynError> {
     let base2 = env::var("OUT_DIR").unwrap();
     detect_path(&base1, mpp_dir)
         .or_else(|_| detect_path(&base2, mpp_dir))
-        .or(MyErr!(format!(
-            "The `MPP_DIR={}` does not detected!",
-            mpp_dir
-        )))
+        .map_err(|_| format!("The `MPP_DIR={}` does not detected!", mpp_dir).into())
 }
 
 fn setup_envir() -> Result<(), DynError> {
-    match env::var("TARGET") {
-        Ok(val) => {
-            if val == "x86_64-unknown-linux-gnu" {
-                return MyErr!("Target not supported!");
-            }
+    if let Ok(val) = env::var("TARGET") {
+        if val == "x86_64-unknown-linux-gnu" {
+            return MyErr!("Target not supported!");
         }
-        _ => {}
     }
 
-    match env::var("MPP_DIR") {
-        Err(_) => {
-            #[cfg(any(
-                feature = "hi3516ev200",
-                feature = "hi3516ev300",
-                feature = "hi3518ev200",
-                feature = "hi3518ev300"
-            ))]
-            env::set_var(
-                "MPP_DIR",
-                detect_mpp_path("vendor/mpp-lib-Hi3516EV200_V1.0.1.0").unwrap(),
-            );
+    if env::var("MPP_DIR").is_err() {
+        #[cfg(any(
+            feature = "hi3516ev200",
+            feature = "hi3516ev300",
+            feature = "hi3518ev200",
+            feature = "hi3518ev300"
+        ))]
+        env::set_var(
+            "MPP_DIR",
+            detect_mpp_path("vendor/mpp-lib-Hi3516EV200_V1.0.1.0").unwrap(),
+        );
 
-            #[cfg(feature = "hi3531v100")]
-            env::set_var(
-                "MPP_DIR",
-                detect_mpp_path("vendor/mpp-lib-Hi3531V100_V1.0.D.0").unwrap(),
-            );
+        #[cfg(feature = "hi3531v100")]
+        env::set_var(
+            "MPP_DIR",
+            detect_mpp_path("vendor/mpp-lib-Hi3531V100_V1.0.D.0").unwrap(),
+        );
 
-            #[cfg(feature = "hi3559av100")]
-            env::set_var(
-                "MPP_DIR",
-                detect_mpp_path("vendor/mpp-lib-Hi3559AV100_V2.0.2.0").unwrap(),
-            );
-        }
-        _ => {}
-    };
-
-    match env::var("SYS_INCLUDE") {
-        Err(_) => {
-            #[cfg(any(
-                feature = "hi3516ev200",
-                feature = "hi3516ev300",
-                feature = "hi3518ev200",
-                feature = "hi3518ev300"
-            ))]
-            env::set_var(
-                "SYS_INCLUDE",
-                "/opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/include",
-            );
-
-            #[cfg(feature = "hi3531v100")]
-            env::set_var(
-                "SYS_INCLUDE",
-                "/opt/hisi-linux-nptl/arm-hisiv100-linux/target/usr/include",
-            );
-
-            #[cfg(feature = "hi3559av100")]
-            env::set_var(
-                "SYS_INCLUDE",
-                "/opt/hisi-linux/x86-arm/aarch64-himix100-linux/aarch64-linux-gnu/sys-include",
-            );
-        }
-        _ => {}
+        #[cfg(feature = "hi3559av100")]
+        env::set_var(
+            "MPP_DIR",
+            detect_mpp_path("vendor/mpp-lib-Hi3559AV100_V2.0.2.0").unwrap(),
+        );
     }
 
-    match env::var("SYS_LIBDIR") {
-        Err(_) => {
-            #[cfg(any(
-                feature = "hi3516ev200",
-                feature = "hi3516ev300",
-                feature = "hi3518ev200",
-                feature = "hi3518ev300"
-            ))]
-            env::set_var(
-                "SYS_LIBDIR",
-                "/opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/lib",
-            );
+    if env::var("SYS_INCLUDE").is_err() {
+        #[cfg(any(
+            feature = "hi3516ev200",
+            feature = "hi3516ev300",
+            feature = "hi3518ev200",
+            feature = "hi3518ev300"
+        ))]
+        env::set_var(
+            "SYS_INCLUDE",
+            "/opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/include",
+        );
 
-            #[cfg(feature = "hi3531v100")]
-            env::set_var(
-                "SYS_LIBDIR",
-                "/opt/hisi-linux-nptl/arm-hisiv100-linux/target/usr/lib",
-            );
+        #[cfg(feature = "hi3531v100")]
+        env::set_var(
+            "SYS_INCLUDE",
+            "/opt/hisi-linux-nptl/arm-hisiv100-linux/target/usr/include",
+        );
 
-            #[cfg(feature = "hi3559av100")]
-            env::set_var(
-                "SYS_LIBDIR",
-                "/opt/hisi-linux/x86-arm/aarch64-himix100-linux/target/usr/lib",
-            );
-        }
-        _ => {}
+        #[cfg(feature = "hi3559av100")]
+        env::set_var(
+            "SYS_INCLUDE",
+            "/opt/hisi-linux/x86-arm/aarch64-himix100-linux/aarch64-linux-gnu/sys-include",
+        );
+    }
+
+    if env::var("SYS_LIBDIR").is_err() {
+        #[cfg(any(
+            feature = "hi3516ev200",
+            feature = "hi3516ev300",
+            feature = "hi3518ev200",
+            feature = "hi3518ev300"
+        ))]
+        env::set_var(
+            "SYS_LIBDIR",
+            "/opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/lib",
+        );
+
+        #[cfg(feature = "hi3531v100")]
+        env::set_var(
+            "SYS_LIBDIR",
+            "/opt/hisi-linux-nptl/arm-hisiv100-linux/target/usr/lib",
+        );
+
+        #[cfg(feature = "hi3559av100")]
+        env::set_var(
+            "SYS_LIBDIR",
+            "/opt/hisi-linux/x86-arm/aarch64-himix100-linux/target/usr/lib",
+        );
     }
 
     Ok(())
@@ -221,7 +206,7 @@ fn main() -> Result<(), DynError> {
     setup_envir()?;
 
     let mpp_dir = env::var("MPP_DIR").unwrap();
-    if Path::new(&mpp_dir).exists() == false {
+    if !Path::new(&mpp_dir).exists() {
         return MyErr!(format!("The `MPP_DIR={}` does not exists", mpp_dir));
     }
 
