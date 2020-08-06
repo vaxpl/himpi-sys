@@ -1203,6 +1203,59 @@ impl PartialEq for VENC_GOP_ATTR_S {
 #[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
 impl Eq for VENC_GOP_ATTR_S {}
 
+// Fix incomplete Debug trait for VENC_PARAM_MOD_S
+#[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
+impl std::fmt::Debug for VENC_PARAM_MOD_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fds = f.debug_struct("VENC_PARAM_MOD_S");
+        fds.field("enVencModType", &self.enVencModType);
+        unsafe {
+            use VENC_MODTYPE_E::*;
+            match self.enVencModType {
+                MODTYPE_VENC => fds
+                    .field("stVencModParam", &self.un1.stVencModParam)
+                    .finish(),
+                MODTYPE_H264E => fds
+                    .field("stH264eModParam", &self.un1.stH264eModParam)
+                    .finish(),
+                MODTYPE_H265E => fds
+                    .field("stH265eModParam", &self.un1.stH265eModParam)
+                    .finish(),
+                MODTYPE_JPEGE => fds
+                    .field("stJpegeModParam", &self.un1.stJpegeModParam)
+                    .finish(),
+                MODTYPE_RC => fds.field("stRcModParam", &self.un1.stRcModParam).finish(),
+                _ => fds.finish(),
+            }
+        }
+    }
+}
+
+// Fix incomplete PartialEq trait for VENC_PARAM_MOD_S
+#[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
+impl PartialEq for VENC_PARAM_MOD_S {
+    fn eq(&self, other: &Self) -> bool {
+        if self.enVencModType != other.enVencModType {
+            return false;
+        }
+        unsafe {
+            use VENC_MODTYPE_E::*;
+            match self.enVencModType {
+                MODTYPE_VENC => self.un1.stVencModParam == other.un1.stVencModParam,
+                MODTYPE_H264E => self.un1.stH264eModParam == other.un1.stH264eModParam,
+                MODTYPE_H265E => self.un1.stH265eModParam == other.un1.stH265eModParam,
+                MODTYPE_JPEGE => self.un1.stJpegeModParam == other.un1.stJpegeModParam,
+                MODTYPE_RC => self.un1.stRcModParam == other.un1.stRcModParam,
+                _ => false,
+            }
+        }
+    }
+}
+
+// Fix incomplete Eq trait for VENC_PARAM_MOD_S
+#[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
+impl Eq for VENC_PARAM_MOD_S {}
+
 // Fix incomplete Debug trait for VENC_PACK_INFO_S
 #[cfg(feature = "mpi-venc")]
 impl std::fmt::Debug for VENC_PACK_INFO_S {
