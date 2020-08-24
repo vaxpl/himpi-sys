@@ -1,6 +1,6 @@
 [package]
 name = "himpi-sys"
-version = "0.1.11"
+version = "0.1.12"
 authors = ["Varphone Wong <varphone@qq.com>"]
 edition = "2018"
 
