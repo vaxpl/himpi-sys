@@ -103,18 +103,6 @@ RUST_TARGET_PATH=$(pwd) xargo [b|c|r|t] ...
 > if RUST_TARGET_PATH not set, the xargo will raise
 > "Error loading target specification..."
 
-**Patch bindgen**:
-
-The package use a patched bindgen to generate ffi bindings,
-you must patch the crates.io to replace the bindgen with the patched version.
-
-```toml
-# Cargo.toml
-
-[patch.crates-io]
-bindgen = { git = "https://github.com/varphone/rust-bindgen.git", rev = "v0.53.2-sp1" }
-```
-
 Examples
 --------
 
