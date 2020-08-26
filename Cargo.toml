@@ -20,11 +20,8 @@ pavo-traits = "0.1"
 rust-bitfield = "0.1"
 
 [build-dependencies]
-bindgen = "0.54.1"
+bindgen = "0.55"
 regex = "1.3"
-
-[patch.crates-io]
-bindgen = { git = "https://github.com/varphone/rust-bindgen.git", rev = "v0.54.1-sp1" }
 
 [features]
 default = []
