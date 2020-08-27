@@ -1,6 +1,8 @@
 himpi-sys
 =========
 
+[![Build Status](https://ci.vaxpl.com/api/badges/rdst/himpi-sys/status.svg?ref=refs/heads/{{BRANCH_NAME}})](https://ci.vaxpl.com/rdst/himpi-sys)
+
 Hi35XX MPI API for Rust unsafe bindings.
 
 Requirements
