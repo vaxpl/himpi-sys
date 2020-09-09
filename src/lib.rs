@@ -43,6 +43,13 @@ impl std::convert::Into<HI_BOOL> for bool {
 
 impl_as_bundle_many!(POINT_S, RECT_S, SIZE_S,);
 
+#[cfg(feature = "mpi-audio")]
+impl Default for AUDIO_TRACK_MODE_E {
+    fn default() -> Self {
+        Self::AUDIO_TRACK_NORMAL
+    }
+}
+
 #[cfg(feature = "mpi-avs")]
 impl_as_bundle_many!(
     AVS_CHN_ATTR_S,
