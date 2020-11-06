@@ -45,6 +45,9 @@ impl_as_bundle_many!(POINT_S, RECT_S, SIZE_S,);
 
 #[cfg(feature = "mpi-audio")]
 impl_as_bundle_many!(
+    ADEC_ATTR_ADPCM_S,
+    ADEC_CHN_ATTR_S,
+    ADEC_DECODER_S,
     AIO_ATTR_S,
     AO_CHN_STATE_S,
     AO_VQE_CONFIG_S,
@@ -52,6 +55,7 @@ impl_as_bundle_many!(
     AUDIO_FILE_STATUS_S,
     AUDIO_FRAME_S,
     AUDIO_SAVE_FILE_INFO_S,
+    AUDIO_STREAM_S,
 );
 
 #[cfg(feature = "mpi-audio")]
