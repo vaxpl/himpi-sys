@@ -247,6 +247,8 @@ fn main() -> Result<(), DynError> {
             writeln!(wrapper, "#include <mpi_ao.h>")?;
         } else {
             writeln!(wrapper, "#include <mpi_audio.h>")?;
+            writeln!(wrapper, "#include <aacdec.h>")?;
+            writeln!(wrapper, "#include <aacenc.h>")?;
             linklib!("aacdec");
             linklib!("aacenc");
         }
@@ -354,13 +356,16 @@ fn main() -> Result<(), DynError> {
         .derive_eq(true)
         .impl_partialeq(true)
         .whitelist_function("^HI_.*")
+        .whitelist_function("^(AAC|ADEC|AENC).*")
         .whitelist_type("^HI_.*$")
         .whitelist_type("*._[ES]$")
+        .whitelist_type("^(AAC|ADEC|AENC).*")
         .whitelist_var("^HI_.*")
         .whitelist_var("^BIND.*|^VB_.*|^POOL_.*")
         .whitelist_var("^(VDEC|VENC|VI|VO|VPSS)_.*")
         .whitelist_var("^(NR|PRORES)_.*")
         .whitelist_var("^SVP_.*")
+        .whitelist_var("^(AAC|ADEC|AENC).*")
         .no_default("hiVIDEO_FRAME_S")
         .no_default("hiVIDEO_FRAME_INFO_S")
         .no_default("hiVIDEO_SUPPLEMENT_S")
