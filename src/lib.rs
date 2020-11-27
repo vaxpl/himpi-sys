@@ -1555,6 +1555,113 @@ impl_as_bundle_many!(
     VIDEO_SUPPLEMENT_S,
 );
 
+#[cfg(feature = "mpi-video")]
+impl Default for COLOR_GAMUT_E {
+    fn default() -> Self {
+        Self::COLOR_GAMUT_BT601
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for COMPRESS_MODE_E {
+    fn default() -> Self {
+        Self::COMPRESS_MODE_NONE
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for DYNAMIC_RANGE_E {
+    fn default() -> Self {
+        Self::DYNAMIC_RANGE_SDR8
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for PIXEL_FORMAT_E {
+    fn default() -> Self {
+        Self::PIXEL_FORMAT_YUV_SEMIPLANAR_420
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for VIDEO_FIELD_E {
+    fn default() -> Self {
+        Self::VIDEO_FIELD_FRAME
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for VIDEO_FORMAT_E {
+    fn default() -> Self {
+        Self::VIDEO_FORMAT_LINEAR
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for VIDEO_FRAME_S {
+    fn default() -> Self {
+        Self {
+            u32Width: 0,
+            u32Height: 0,
+            enField: Default::default(),
+            enPixelFormat: Default::default(),
+            enVideoFormat: Default::default(),
+            enCompressMode: Default::default(),
+            enDynamicRange: Default::default(),
+            enColorGamut: Default::default(),
+            u32HeaderStride: Default::default(),
+            u32Stride: Default::default(),
+            u32ExtStride: Default::default(),
+            u64HeaderPhyAddr: Default::default(),
+            u64HeaderVirAddr: Default::default(),
+            u64PhyAddr: Default::default(),
+            u64VirAddr: Default::default(),
+            u64ExtPhyAddr: Default::default(),
+            u64ExtVirAddr: Default::default(),
+            s16OffsetTop: 0,
+            s16OffsetBottom: 0,
+            s16OffsetLeft: 0,
+            s16OffsetRight: 0,
+            u32MaxLuminance: 0,
+            u32MinLuminance: 0,
+            u32TimeRef: 0,
+            u64PTS: 0,
+            u64PrivateData: 0,
+            u32FrameFlag: 0,
+            stSupplement: Default::default(),
+        }
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for VIDEO_FRAME_INFO_S {
+    fn default() -> Self {
+        Self {
+            stVFrame: Default::default(),
+            u32PoolId: 0,
+            enModId: MOD_ID_E::HI_ID_VB,
+        }
+    }
+}
+
+#[cfg(feature = "mpi-video")]
+impl Default for VIDEO_SUPPLEMENT_S {
+    fn default() -> Self {
+        Self {
+            u64JpegDCFPhyAddr: 0,
+            u64IspInfoPhyAddr: 0,
+            u64LowDelayPhyAddr: 0,
+            u64MotionDataPhyAddr: 0,
+            u64FrameDNGPhyAddr: 0,
+            pJpegDCFVirAddr: std::ptr::null_mut(),
+            pIspInfoVirAddr: std::ptr::null_mut(),
+            pLowDelayVirAddr: std::ptr::null_mut(),
+            pMotionDataVirAddr: std::ptr::null_mut(),
+            pFrameDNGVirAddr: std::ptr::null_mut(),
+        }
+    }
+}
+
 #[cfg(feature = "mpi-vo")]
 impl_as_bundle_many!(
     VO_BORDER_S,
