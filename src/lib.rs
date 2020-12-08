@@ -59,6 +59,24 @@ impl_as_bundle_many!(
 );
 
 #[cfg(feature = "mpi-audio")]
+impl Default for AIO_ATTR_S {
+    fn default() -> Self {
+        Self {
+            enSamplerate: AUDIO_SAMPLE_RATE_E::AUDIO_SAMPLE_RATE_8000,
+            enBitwidth: AUDIO_BIT_WIDTH_E::AUDIO_BIT_WIDTH_8,
+            enWorkmode: AIO_MODE_E::AIO_MODE_I2S_MASTER,
+            enSoundmode: AUDIO_SOUND_MODE_E::AUDIO_SOUND_MODE_MONO,
+            u32EXFlag: 0,
+            u32FrmNum: 0,
+            u32PtNumPerFrm: 0,
+            u32ChnCnt: 0,
+            u32ClkSel: 0,
+            enI2sType: AIO_I2STYPE_E::AIO_I2STYPE_INNERCODEC,
+        }
+    }
+}
+
+#[cfg(feature = "mpi-audio")]
 impl Default for AUDIO_TRACK_MODE_E {
     fn default() -> Self {
         Self::AUDIO_TRACK_NORMAL

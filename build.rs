@@ -369,6 +369,7 @@ fn main() -> Result<(), DynError> {
         .no_default("hiVIDEO_FRAME_S")
         .no_default("hiVIDEO_FRAME_INFO_S")
         .no_default("hiVIDEO_SUPPLEMENT_S")
+        .no_default("hiAIO_ATTR_S")
         .use_core()
         .clang_arg(format!("-I{}/include", env::var("MPP_DIR").unwrap()))
         .clang_arg(format!("-I{}", env::var("SYS_INCLUDE").unwrap()))
