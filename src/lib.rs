@@ -1245,6 +1245,14 @@ impl PartialEq for VENC_GOP_ATTR_S {
 #[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
 impl Eq for VENC_GOP_ATTR_S {}
 
+// Force impl Send for VENC_PACK_S
+#[cfg(feature = "mpi-venc")]
+unsafe impl Send for VENC_PACK_S {}
+
+// Force impl Sync for VENC_PACK_S
+#[cfg(feature = "mpi-venc")]
+unsafe impl Sync for VENC_PACK_S {}
+
 // Fix incomplete Debug trait for VENC_PARAM_MOD_S
 #[cfg(all(feature = "mpi-venc", not(feature = "hi3531v100")))]
 impl std::fmt::Debug for VENC_PARAM_MOD_S {
@@ -1472,6 +1480,14 @@ impl PartialEq for VENC_STREAM_S {
 // Fix incomplete Eq trait for VENC_STREAM_S
 #[cfg(feature = "mpi-venc")]
 impl Eq for VENC_STREAM_S {}
+
+// Force impl Send for VENC_STREAM_S
+#[cfg(feature = "mpi-venc")]
+unsafe impl Send for VENC_STREAM_S {}
+
+// Force impl Sync for VENC_STREAM_S
+#[cfg(feature = "mpi-venc")]
+unsafe impl Sync for VENC_STREAM_S {}
 
 // Fix incomplete Eq trait for VENC_STREAM_INFO_S
 #[cfg(feature = "mpi-venc")]
