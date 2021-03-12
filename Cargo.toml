@@ -17,7 +17,7 @@ license = "MIT"
 [dependencies]
 cfg-if = "0.1"
 pavo-traits = "0.1"
-rust-bitfield = "0.1"
+bitfield-derive = "0.1"
 
 [build-dependencies]
 bindgen = "0.56"

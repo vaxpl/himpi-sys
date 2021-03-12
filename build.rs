@@ -397,6 +397,7 @@ fn main() -> Result<(), DynError> {
         .whitelist_var("^(NR|PRORES)_.*")
         .whitelist_var("^SVP_.*")
         .whitelist_var("^(AAC|ADEC|AENC).*")
+        .blacklist_type("tV56aMDy|tV56aNRc|tV56aTFy")
         .no_default("hiVIDEO_FRAME_S")
         .no_default("hiVIDEO_FRAME_INFO_S")
         .no_default("hiVIDEO_SUPPLEMENT_S")
