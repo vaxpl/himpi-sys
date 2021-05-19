@@ -1811,6 +1811,7 @@ pub struct tV56aMDy {
 }
 
 #[cfg(feature = "mpi-vpss")]
+#[allow(clippy::all)]
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq, BitFields)]
 pub struct tV56aNRc {
     /// Spatial NR strength for the first level.
@@ -1848,6 +1849,7 @@ pub struct tV56aNRc {
 }
 
 #[cfg(feature = "mpi-vpss")]
+#[allow(clippy::all)]
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq, BitFields)]
 pub struct tV56aTFy {
     /// The bitfields for `TFS`, `TDZ` and `TDX`.
