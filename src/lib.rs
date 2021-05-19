@@ -362,6 +362,21 @@ impl_as_bundle_many!(IVE_RESIZE2_CTRL_S,);
 #[cfg(all(feature = "mpi-ive", any(feature = "hi3516dv300")))]
 impl_as_bundle_many!(IVE_RECT_U16_S, IVE_RECT_U32_S,);
 
+// Fix incomplete Debug trait for IVE_EQUALIZE_HIST_CTRL_MEM_S
+#[cfg(all(feature = "mpi-ive", not(feature = "hi3531v100")))]
+impl std::fmt::Debug for IVE_EQUALIZE_HIST_CTRL_MEM_S {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("IVE_EQUALIZE_HIST_CTRL_MEM_S")
+            .field("au32Hist", &self.au32Hist)
+            .field("au8Map", &self.au8Map)
+            .finish()
+    }
+}
+
+// Fix incomplete Eq trait for IVE_EQUALIZE_HIST_CTRL_MEM_S
+#[cfg(all(feature = "mpi-ive", not(feature = "hi3531v100")))]
+impl Eq for IVE_EQUALIZE_HIST_CTRL_MEM_S {}
+
 #[cfg(feature = "mpi-nnie")]
 impl_as_bundle_many!(
     SVP_BLOB_S,
