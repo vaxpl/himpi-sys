@@ -1795,10 +1795,10 @@ pub struct tV56aMDy {
     /// * MAI0 - Range: `[0,   3]`
     /// * MAI1 - Range: `[0,   3]`
     /// * MAI2 - Range: `[0,   3]`
-    #[bitfield(MADZ : [9:0] "The blending ratio between MAI2 and MAI1 based on image statistics.")]
-    #[bitfield(MAI0 : [11:10] "The three blending results between spatial and temporal filtering.")]
-    #[bitfield(MAI1 : [13:12] "The three blending results between spatial and temporal filtering.")]
-    #[bitfield(MAI2 : [15:14] "The three blending results between spatial and temporal filtering.")]
+    #[bitfield(MADZ @ "9:0" "The blending ratio between MAI2 and MAI1 based on image statistics.")]
+    #[bitfield(MAI0 @ "11:10" "The three blending results between spatial and temporal filtering.")]
+    #[bitfield(MAI1 @ "13:12" "The three blending results between spatial and temporal filtering.")]
+    #[bitfield(MAI2 @ "15:14" "The three blending results between spatial and temporal filtering.")]
     pub _bitfield1: u16,
     /// The blending ratio between MAI2 and MAI1 based on brightness. (low limit).
     /// * MADK - Range: `[0, 255]`
@@ -1810,23 +1810,22 @@ pub struct tV56aMDy {
     /// * MATH - Range: `[0, 999]`
     /// * MATE - Range: `[0,   8]`
     /// * MATW - Range: `[0,   3]`
-    #[bitfield(MATH : [9:0] "The theshold for motion detection.")]
-    #[bitfield(MATE : [13:10] "The motion index for smooth image area.")]
-    #[bitfield(MATW : [15:14] "The motion index for prevention of motion ghost.")]
+    #[bitfield(MATH @ "9:0" "The theshold for motion detection.")]
+    #[bitfield(MATE @ "13:10" "The motion index for smooth image area.")]
+    #[bitfield(MATW @ "15:14" "The motion index for prevention of motion ghost.")]
     pub _bitfield2: u16,
     /// The bitfields for `MATH`, `MATE` and `MATW`.
     /// * MASW - Range: `[0,  15]`
     /// * MABW - Range: `[0,   4]`
     /// * MAXN - Range: `[0,   1]`
-    #[bitfield(MASW : [3:0] "The motion index for low-frequency noises.")]
-    #[bitfield(MABW : [6:4] "The window size for motion detection.")]
-    #[bitfield(MAXN : [7] "Not for tunning.")]
+    #[bitfield(MASW @ "3:0" "The motion index for low-frequency noises.")]
+    #[bitfield(MABW @ "6:4" "The window size for motion detection.")]
+    #[bitfield(MAXN @ "7" "Not for tunning.")]
     pub _bitfield3: u8,
     pub _rB_: u8,
 }
 
 #[cfg(feature = "mpi-vpss")]
-#[allow(clippy::all)]
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq, BitFields)]
 pub struct tV56aNRc {
     /// Spatial NR strength for the first level.
@@ -1834,46 +1833,45 @@ pub struct tV56aNRc {
     pub SFC: u8,
     /// The bitfields for `_rb_` and `TFC`.
     /// * TFC - Range: `[0,  63]`
-    #[bitfield(_rb_ : [1:0])]
-    #[bitfield(TFC : [7:2] "Temporal NR strength.")]
+    #[bitfield(_rb_ @ "1:0")]
+    #[bitfield(TFC @ "7:2" "Temporal NR strength.")]
     pub _bitfield1: u8,
     /// The bitfields for `CSFS` and `CSFR`.
     /// * CSFS - Range: `[0, 999]`
     /// * CSFR - Range: `[0,  32]`
-    #[bitfield(CSFS : [9:0] "Spatial NR strength for the second level.")]
-    #[bitfield(CSFR : [15:10] "Spatial NR strength control.")]
+    #[bitfield(CSFS @ "9:0" "Spatial NR strength for the second level.")]
+    #[bitfield(CSFR @ "15:10" "Spatial NR strength control.")]
     pub _bitfield2: u16,
     /// The bitfield for `CTFR`, `CTFS` and `CIIR`.
     /// * CTFR - Range: `[0, 999]`
     /// * CTFS - Range: `[0,  15]`
     /// * CIIR - Range: `[0,   1]`
-    #[bitfield(CTFR : [10:0] "Temporal NR strength control.")]
-    #[bitfield(CTFS : [14:1] "Temporal NR filtering strength.")]
-    #[bitfield(CIIR : [15] "Spatial NR mode for the first level.")]
+    #[bitfield(CTFR @ "10:0" "Temporal NR strength control.")]
+    #[bitfield(CTFS @ "14:1" "Temporal NR filtering strength.")]
+    #[bitfield(CIIR @ "15" "Spatial NR mode for the first level.")]
     pub _bitfield3: u16,
     /// The bitfields for `MODE` and `_rb1_`.
     /// * MODE - Range: `[0,  1]`
-    #[bitfield(MODE : [0] "The switch for new chroma denoise mode.")]
-    #[bitfield(_rb1_ : [7:1])]
+    #[bitfield(MODE @ "0" "The switch for new chroma denoise mode.")]
+    #[bitfield(_rb1_ @ "7:1")]
     pub _bitfield4: u8,
     /// The bitfields for `PRESFC` and `_rb2_`.
     /// * PRESFC - Range: `[0,  32]`
-    #[bitfield(PRESFC : [5:0] "The strength for chroma pre spatial filter.")]
-    #[bitfield(_rb2_ : [7:6])]
+    #[bitfield(PRESFC @ "5:0" "The strength for chroma pre spatial filter.")]
+    #[bitfield(_rb2_ @ "7:6")]
     pub _bitfield5: u8,
 }
 
 #[cfg(feature = "mpi-vpss")]
-#[allow(clippy::all)]
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq, BitFields)]
 pub struct tV56aTFy {
     /// The bitfields for `TFS`, `TDZ` and `TDX`.
     /// * TFS - Range: `[0,  15]`
     /// * TDZ - Range: `[0, 999]`
     /// * TDX - Range: `[0,   3]`
-    #[bitfield(TFS : [3:0] "The NR strength for temporal filtering.")]
-    #[bitfield(TDZ : [13:4] "Protection of the weak texture area from temporal filtering.")]
-    #[bitfield(TDX : [15:14] "Not for tuning.")]
+    #[bitfield(TFS @ "3:0" "The NR strength for temporal filtering.")]
+    #[bitfield(TDZ @ "13:4" "Protection of the weak texture area from temporal filtering.")]
+    #[bitfield(TDX @ "15:14" "Not for tuning.")]
     pub _bitfield1: u16,
     /// The temoproal NR strength control for background (static) area.
     /// * TFR - Range: `[0,  31]`
@@ -1881,17 +1879,17 @@ pub struct tV56aTFy {
     /// The bitfields for `TSS`, `TSI` and `_rb_`.
     /// * TSS - Range: `[0,  15]`
     /// * TSI - Range: `[0,   1]`
-    #[bitfield(TSS : [3:0] "The ratio for blending spatial NR with the temproal NR results.")]
-    #[bitfield(TSI : [4] "The selection of blending filter for TSS.")]
-    #[bitfield(_rb_ : [6:5])]
+    #[bitfield(TSS @ "3:0" "The ratio for blending spatial NR with the temproal NR results.")]
+    #[bitfield(TSI @ "4" "The selection of blending filter for TSS.")]
+    #[bitfield(_rb_ @ "6:5")]
     pub _bitfield2: u8,
     /// The bitfields for `SDZ`, `STR` and `bRef`.
     /// * SDZ  - Range: `[0, 999]`
     /// * STR  - Range: `[0,  31]`
     /// * bRef - Range: `[0,   1]`
-    #[bitfield(SDZ : [9:0] "The threshold of NR control for result MAI1.")]
-    #[bitfield(STR : [14:10] "The strength of NR control for result MAI1.")]
-    #[bitfield(bRef : [15] "The switch for temproal filtering.")]
+    #[bitfield(SDZ @ "9:0" "The threshold of NR control for result MAI1.")]
+    #[bitfield(STR @ "14:10" "The strength of NR control for result MAI1.")]
+    #[bitfield(bRef @ "15" "The switch for temproal filtering.")]
     pub _bitfield3: u16,
 }
 
