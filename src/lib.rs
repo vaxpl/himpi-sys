@@ -14,6 +14,7 @@
 #![allow(clippy::transmute_ptr_to_ptr)]
 #![allow(clippy::trivially_copy_pass_by_ref)]
 #![allow(clippy::unreadable_literal)]
+#![allow(clippy::upper_case_acronyms)]
 #![allow(clippy::useless_transmute)]
 
 use bitfield_derive::BitFields;
@@ -25,16 +26,16 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 pub type HI_VOID = ::std::os::raw::c_void;
 
 /// Make HI_BOOL can convert to bool.
-impl std::convert::Into<bool> for HI_BOOL {
-    fn into(self) -> bool {
-        self == HI_BOOL::HI_TRUE
+impl From<HI_BOOL> for bool {
+    fn from(val: HI_BOOL) -> Self {
+        val == HI_BOOL::HI_TRUE
     }
 }
 
 /// Make bool can convert to HI_BOOL.
-impl std::convert::Into<HI_BOOL> for bool {
-    fn into(self) -> HI_BOOL {
-        if self {
+impl From<bool> for HI_BOOL {
+    fn from(val: bool) -> Self {
+        if val {
             HI_BOOL::HI_TRUE
         } else {
             HI_BOOL::HI_FALSE
@@ -1188,9 +1189,9 @@ impl From<u32> for VENC_DATA_TYPE_U {
 
 // Cast VENC_DATA_TYPE_U -> u32
 #[cfg(feature = "mpi-venc")]
-impl Into<u32> for VENC_DATA_TYPE_U {
-    fn into(self) -> u32 {
-        unsafe { self._bindgen_union_align }
+impl From<VENC_DATA_TYPE_U> for u32 {
+    fn from(val: VENC_DATA_TYPE_U) -> Self {
+        unsafe { val._bindgen_union_align }
     }
 }
 

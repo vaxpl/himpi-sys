@@ -106,19 +106,16 @@ fn detect_sdkver(mpp_dir: &str) -> Option<&str> {
     if let Ok(file) = File::open(autoconf) {
         let re = Regex::new(r#"#define\sAUTOCONF_TIMESTAMP\s"([^"]+)""#).unwrap();
         let reader = BufReader::new(file);
-        for line in reader.lines() {
-            if let Ok(ref line) = line {
-                if let Some(caps) = re.captures(line) {
-                    if let Ok(ts) = NaiveDateTime::parse_from_str(&caps[1], "%Y-%m-%d %H:%M:%S CST")
-                    {
-                        let ymd = ts.date();
-                        if ymd == NaiveDate::from_ymd(2018, 12, 21) {
-                            return Some("2.0.2.0"); // Hi3559AV100_SDK_V2.0.2.0
-                        } else if ymd == NaiveDate::from_ymd(2019, 9, 16) {
-                            return Some("2.0.3.1"); // Hi3559AV100_SDK_V2.0.3.1
-                        } else {
-                            break;
-                        }
+        for line in reader.lines().flatten() {
+            if let Some(caps) = re.captures(&line) {
+                if let Ok(ts) = NaiveDateTime::parse_from_str(&caps[1], "%Y-%m-%d %H:%M:%S CST") {
+                    let ymd = ts.date();
+                    if ymd == NaiveDate::from_ymd(2018, 12, 21) {
+                        return Some("2.0.2.0"); // Hi3559AV100_SDK_V2.0.2.0
+                    } else if ymd == NaiveDate::from_ymd(2019, 9, 16) {
+                        return Some("2.0.3.1"); // Hi3559AV100_SDK_V2.0.3.1
+                    } else {
+                        break;
                     }
                 }
             }
